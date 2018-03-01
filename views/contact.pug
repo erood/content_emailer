@@ -1,0 +1,25 @@
+extends layout
+block content
+  //jquery
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+  br
+  br
+  br
+  br
+  #blurb.container(style="width:70%;text-align:center")
+    br
+    h4 Feedback? Questions? Feature requests?
+    |
+    a(style='font-size:110%;')(href='mailto:hi@find-me.co') hi@find-me.co
+    |
+    br
+    br
+
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');

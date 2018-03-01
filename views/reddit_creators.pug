@@ -1,0 +1,508 @@
+//being manual extend layout
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='theme-color' content='#4DA5F4')
+    meta(name='csrf-token', content=_csrf)
+    title #{title} - Find-me
+    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+    include partials/header
+
+
+    .container
+      include partials/flash
+      block content
+
+    include partials/footer
+
+    
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');
+
+
+//end manual extend layout paste (interferes with background image, account jquery dropdown)
+block content
+  script.
+    window.onload = function start(){
+
+    }
+  .container(style='text-align:center')
+      h3 Scraping Reddit to find the most popular domains
+      hr
+  .col-md-10.col-md-offset-1
+    // Load mathjax
+    script(src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')
+    // MathJax configuration
+    script(type='text/x-mathjax-config').
+      MathJax.Hub.Config({
+      tex2jax: {
+      inlineMath: [ ['$','$'], ["\\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\\[","\\]"] ],
+      processEscapes: true,
+      processEnvironments: true
+      },
+      // Center justify equations in code and markdown cells. Elsewhere
+      // we use CSS to left justify single line equations in code cells.
+      displayAlign: 'center',
+      "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+      }
+      });
+    // End of mathjax configuration
+    <link rel="stylesheet" href="/css/notebooks.css">
+    <body>
+      <div tabindex="-1" id="notebook" class="border-box-sizing">
+        <div class="container" id="notebook-container">
+    h4 Overview 
+    <p> Reddit is one of the <a href="https://www.alexa.com/siteinfo/reddit.com">10 most popular sites on the internet</a>, making it a great way to find independent content creators (either for advertising purposes, or simply content discovery).</p>
+    <p> Below, we'll show you how to scrape Reddit using <a href="http://praw.readthedocs.io/en/latest/getting_started/quick_start.html">Praw</a> (Python Reddit API Wrapper). For this example, our goal will be to scrape the top submissions for the month in a few subreddits, storing the following: submission URL, domain (website URL), submission score. We use a similar dataset to help build the <a href="http://praw.readthedocs.io/en/latest/getting_started/quick_start.html">Find-me database</a> of content creators open to advertising opportunities.</p>
+    <br>
+    h4 Import packages, set up PRAW, select subreddits
+
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+    <div class="input_area">
+      <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#packages</span>
+      <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+      <span class="kn">import</span> <span class="nn">praw</span>
+      <span class="kn">import</span> <span class="nn">operator</span>
+      <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+      <span class="c1">#set up praw - setup here: http://praw.readthedocs.io/en/latest/getting_started/quick_start.html</span>
+      <span class="n">reddit</span> <span class="o">=</span> <span class="n">praw</span><span class="o">.</span><span class="n">Reddit</span><span class="p">(</span><span class="n">client_id</span><span class="o">=</span><span class="s1">&#39;my client id&#39;</span><span class="p">,</span>
+                           <span class="n">client_secret</span><span class="o">=</span><span class="s1">&#39;my client secret&#39;</span><span class="p">,</span>
+                           <span class="n">user_agent</span><span class="o">=</span><span class="s1">&#39;my user agent&#39;</span><span class="p">)</span>
+
+      <span class="c1">#create list of subreddits to include</span>
+      <span class="n">s_list</span> <span class="o">=</span> \
+      <span class="p">[</span>
+      <span class="s1">&#39;funny&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;todayilearned&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;science&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;worldnews&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;gaming&#39;</span><span class="p">]</span>
+      </pre></div>
+
+      </div>
+      </div>
+      </div>
+
+    <div class="output_wrapper">
+    <div class="output">
+
+
+    <div class="output_area"><div class="prompt"></div>
+
+    </div>
+
+    </div>
+    </div>
+
+    </div>
+    <br>
+    h4 Grab the score, domain (url), and subreddit for each top monthly submission 
+    <p> In this section we're looping through our array of subreddits from above and storing key information (score, domain, id). The output of this section is 3 separate dataframes, which we can then merge together using the Reddit submission ID.</p>
+
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="n">domains_sub</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">domains</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">domains_score</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">domains_url</span> <span class="o">=</span> <span class="p">{}</span>
+    <br>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s_list</span><span class="p">:</span>
+        <!--manual indent-->
+        <div style="margin-left: 2em;">
+        <span class="c1">#--Aggregating Score--#</span>
+        <span class="c1">#pull in top submissions for the month for subreddit specified in list above</span>
+        <span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>   
+        <span class="n">submissions</span> <span class="o">=</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="c1">#sum score across submissions</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">submissions</span><span class="p">:</span>
+            <span class="k">    if</span> <span class="n">s</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">domains_score</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">        domains_score</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">score</span>
+            <span class="k">    else</span><span class="p">:</span>
+                <span class="n">        domains_score</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">score</span>
+        <br>
+        <span class="n">df_score</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">domains_score</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">df_score</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
+        <br>
+        <span class="c1">#--Grab domain for given submission ID--#</span>
+        <span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>   <span class="c1">#input(&#39;enter subreddit name: /r/&#39;))</span>
+        <span class="n">submissions</span> <span class="o">=</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">submissions</span><span class="p">:</span>
+            <span class="k">    if</span> <span class="n">s</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">domains</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                
+                <span class="n">        domains</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">domain</span>
+            <span class="k">    else</span><span class="p">:</span>
+                
+                <span class="n">        domains</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">domain</span>
+
+        <span class="n">df_domain</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">domains</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">df_domain</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span>
+
+        <br>
+        <span class="c1">#--Grab subreddit for given submission ID--#</span>
+        <span class="n">subreddit</span> <span class="o">=</span> <span class="n">reddit</span><span class="o">.</span><span class="n">subreddit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">submissions</span> <span class="o">=</span> <span class="n">subreddit</span><span class="o">.</span><span class="n">top</span><span class="p">(</span><span class="s1">&#39;month&#39;</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">submissions</span><span class="p">:</span>
+            <span class="k">    if</span> <span class="n">s</span><span class="o">.</span><span class="n">id</span> <span class="ow">in</span> <span class="n">domains_sub</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                
+                <span class="n">        domains_sub</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">subreddit</span><span class="o">.</span><span class="n">display_name</span>
+            <span class="k">    else</span><span class="p">:</span>
+                
+                <span class="n">        domains_sub</span><span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">subreddit</span><span class="o">.</span><span class="n">display_name</span>
+
+    <span class="n">df_subreddit</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">domains_sub</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">df_subreddit</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;subreddit&#39;</span><span class="p">]</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+    </div>
+    <br>
+    h4 Preview our 3 dataframes
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Subreddit, post ID</span>
+    <span class="n">df_subreddit</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+    <div class="output_wrapper">
+    <div class="output">
+
+
+
+    <div class="output_html rendered_html output_subarea output_execute_result">
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>id</th>
+          <th>subreddit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>78tulq</td>
+          <td>todayilearned</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>76bn5s</td>
+          <td>science</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>7871xy</td>
+          <td>science</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>77pnk6</td>
+          <td>science</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>75eydj</td>
+          <td>gaming</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+
+    </div>
+
+    
+
+    </div>
+    <br>
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Score, post ID</span>
+    <span class="n">df_score</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+    <div class="output_wrapper">
+    <div class="output">
+
+
+
+    <div class="output_html rendered_html output_subarea output_execute_result">
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>id</th>
+          <th>score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>78tulq</td>
+          <td>42720</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>76bn5s</td>
+          <td>25021</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>7871xy</td>
+          <td>30648</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>77pnk6</td>
+          <td>13178</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>75eydj</td>
+          <td>64504</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+
+    </div>
+    <br>
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Domain (URL), post ID</span>
+    <span class="n">df_domain</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+    <div class="output_wrapper">
+    <div class="output">
+
+
+
+    <div class="output_html rendered_html output_subarea output_execute_result">
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>id</th>
+          <th>domain</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>78tulq</td>
+          <td>atlasobscura.com</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>76bn5s</td>
+          <td>ns.umich.edu</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>7871xy</td>
+          <td>acsh.org</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>77pnk6</td>
+          <td>jech.bmj.com</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>75eydj</td>
+          <td>i.redd.it</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <br>
+    h4 Merge dataframes
+    <p> Here we merge the three tables together, using submission ID as primary key.</p>
+
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#merge the three tables together, using submission ID as primary key</span>
+    <span class="n">df_sub_score</span> <span class="o">=</span> <span class="n">df_subreddit</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_score</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">)</span>
+    <span class="n">df_final</span> <span class="o">=</span> <span class="n">df_sub_score</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_domain</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Add in submission URL using the &#39;id&#39; </span>
+    <span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;www.reddit.com/&#39;</span><span class="p">]</span><span class="o">+</span><span class="n">df_final</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span> 
+
+    <span class="n">df_final</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+    <div class="output_wrapper">
+    <div class="output">
+
+
+
+    <div class="output_html rendered_html output_subarea output_execute_result">
+    <div>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>id</th>
+          <th>subreddit</th>
+          <th>score</th>
+          <th>domain</th>
+          <th>url</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>78tulq</td>
+          <td>todayilearned</td>
+          <td>42729</td>
+          <td>atlasobscura.com</td>
+          <td>www.reddit.com/78tulq</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>76bn5s</td>
+          <td>science</td>
+          <td>25024</td>
+          <td>ns.umich.edu</td>
+          <td>www.reddit.com/76bn5s</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>7871xy</td>
+          <td>science</td>
+          <td>30642</td>
+          <td>acsh.org</td>
+          <td>www.reddit.com/7871xy</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>77pnk6</td>
+          <td>science</td>
+          <td>13176</td>
+          <td>jech.bmj.com</td>
+          <td>www.reddit.com/77pnk6</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>75eydj</td>
+          <td>gaming</td>
+          <td>64510</td>
+          <td>i.redd.it</td>
+          <td>www.reddit.com/75eydj</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    h4 Done! Explore the output here:
+    <p>We now have a nice clean dataframe of the top monthly posts for our chosen subreddit, allowing us to see which domains racked up the highest scores/# of top posts. We threw together a <a href="https://www.find-me.co/domains">small tool</a> with the output if you'd like to dig through the data yourself.</p>
+    </div>
+
+    </div>
+    <br>
+    // Begin MailChimp Signup Form (Blog)
+    link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
+    style(type='text/css').
+      #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+      /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+    #mc_embed_signup
+      form#mc-embedded-subscribe-form.validate(action='https://find-me.us13.list-manage.com/subscribe/post?u=262c11ce96e8bc9ddb6d07ea8&id=94ce60e5da', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='')
+        #mc_embed_signup_scroll
+          label(for='mce-EMAIL') Join our email list to be notified when we post about once/month
+          <br>
+          #mc_embed_signup_scroll
+            //label(for='mce-EMAIL', style='display:block') Subscribe to our mailing list
+            input#mce-EMAIL.email(type='email', value='', name='EMAIL', placeholder='email address -- we never spam', required='')
+            // real people should not fill this in and expect good things - do not remove this or risk form bot signups
+            div(style='position: absolute; left: -5000px;', aria-hidden='true')
+              input(type='text', name='b_262c11ce96e8bc9ddb6d07ea8_968245194c', tabindex='-1', value='')
+          .clear
+            input#mc-embedded-subscribe.button(type='submit', value='Subscribe', name='subscribe')
+      // End MailChimp Signup Form
+</div>
+
+<!--End mc_embed_signup-->
+
+    </div>
+    </div>
+
+    </div>
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+    </div>
+
+
+// Global Site Tag (gtag.js) - Google Analytics - find-me
+script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+script.
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-105691246-1');          

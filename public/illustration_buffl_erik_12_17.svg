@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1849px"
+   height="212px"
+   viewBox="0 0 1849 212"
+   version="1.1"
+   id="svg4295"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="illustration_buffl_erik_12_17.svg"
+   inkscape:export-filename="/Users/erikrood/Desktop/illustration_buffl_erik_12_17.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata4414">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>bottom</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1440"
+     inkscape:window-height="805"
+     id="namedview4412"
+     showgrid="false"
+     inkscape:zoom="0.71972686"
+     inkscape:cx="1072.8894"
+     inkscape:cy="156.88994"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Group-2" />
+  <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+  <title
+     id="title4297">bottom</title>
+  <desc
+     id="desc4299">Created with Sketch.</desc>
+  <defs
+     id="defs4301">
+    <linearGradient
+       id="linearGradient4416"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#21ce99;stop-opacity:0.96078432;"
+         offset="0"
+         id="stop4418" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4416"
+       id="linearGradient4420"
+       x1="0.42873535"
+       y1="235.0718"
+       x2="2098"
+       y2="235.0718"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.88739323,0,0,0.59191914,236.24899,191.798)" />
+  </defs>
+  <g
+     id="Page-1"
+     stroke="none"
+     stroke-width="1"
+     fill="none"
+     fill-rule="evenodd">
+    <g
+       id="bottom">
+      <g
+         id="Group-2"
+         transform="translate(-233.000000, -62.000000)">
+        <path
+           d="m 262.26375,206.7361 c 0,0 -126.72438,-41.35432 498.67988,-41.35432 238.95678,0 242.53647,-32.19019 445.17507,-32.61155 85.9871,-0.1788 448.198,44.25296 529.548,49.70734 244.8537,16.41699 374.5971,-17.09579 374.5971,-17.09579 l 0,304.61822 -1848.00005,0 z"
+           id="Rectangle-15"
+           style="fill:#9affeb;fill-opacity:1"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cssscccc" />
+        <path
+           d="m 250,206.7361 c 0,0 -117.1269,-102.15993 388.76211,-88.22083 55.03756,1.51649 -19.49303,-0.61243 1.65601,0.51835 C 881.63898,131.931 1316.8,262.15226 1517.9453,237.59375 1843.2431,197.87706 2098,165.38178 2098,165.38178 L 2098,470 250,470 Z"
+           id="path4307"
+           style="fill:#20f4cb;fill-opacity:1"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cssscccc" />
+        <path
+           d="m 236.62945,191.883 c 0,0 210.8269,136.71996 765.80645,136.71996 212.0486,0 396.0653,-46.74312 574.5603,-61.27977 C 1865.6632,243.81412 2098,313.3634 2098,313.3634 L 2098,470 235.79074,461.6635 Z"
+           id="path4309"
+           style="fill:url(#linearGradient4420);fill-opacity:1"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="csscccc" />
+      </g>
+    </g>
+  </g>
+</svg>

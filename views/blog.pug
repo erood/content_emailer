@@ -1,0 +1,93 @@
+//being manual extend layout
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='theme-color' content='#4DA5F4')
+    meta(name='csrf-token', content=_csrf)
+    title #{title} - Find-me
+    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+    include partials/header
+
+
+    .container
+      include partials/flash
+      block content
+
+    include partials/footer
+
+    
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');
+
+
+//end manual extend layout paste (interferes with background image, account jquery dropdown)
+
+block content
+<body>
+
+    <div class="container">
+        <br>
+        <div class='col-md-10 col-md-offset-1' >
+            <ul style = "list-style:none;text-align:center;padding-left:0px !important;">
+            <hr>
+            <a style="font-size:24px;" href="https://www.find-me.co/blog/python_sheets">Reading and writing to Google Spreadsheets using Python</a><a target="_blank"></a>
+            <li><img style= width:30%; display:inline; height= auto; src="/python_sheets.png" alt="reddit_scrape"></a>
+            <br>
+            </li>
+            <p style="text-align:left"> 
+            | We show you how to read and write to a Google Spreadsheet using Python. You can follow along and finish with a Google sheet where you can import/export data into/out of a Pandas dataframe. <a style="font-size:24px;" href="https://www.find-me.co/blog/python_sheets">[...]</a><a target="_blank"></a></p>
+            <p style="text-align:left;font-size:15px;line-height:2 !important;"> [December 7th, 2017]</p>
+            <hr>
+            <a style="font-size:24px;" href="https://www.find-me.co/blog/reddit_creators">Scraping Reddit to find the most popular domains</a><a target="_blank"></a>
+            <li><img style= width:20%; display:inline; height= auto; src="/reddit_alien.png" alt="reddit_scrape"></a>
+            <br>
+            </li>
+            <p style="text-align:left"> 
+            | We show you how to use Python to scrape the top domains (urls) posted on Reddit. We use this at Find-me to help identify content creators to add to our database. <a style="font-size:24px;" href="https://www.find-me.co/blog/reddit_creators">[...]</a><a target="_blank"></a></p>
+            <p style="text-align:left;font-size:15px;line-height:2 !important;"> [November 5th, 2017]</p>
+            <hr>
+            <li> More to come! </li>
+            <!--<li><a href="http://erikrood.com/Posts/salary_dist_sports.html">Salary distribution in sports</a>
+            </li>
+            <hr>-->
+            
+            </ul>
+        <br>
+        <br>
+        <br>              
+        <br>
+        // Begin MailChimp Signup Form (Blog)
+        link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
+        style(type='text/css').
+          #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+          /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+          We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+        #mc_embed_signup
+          form#mc-embedded-subscribe-form.validate(action='https://find-me.us13.list-manage.com/subscribe/post?u=262c11ce96e8bc9ddb6d07ea8&id=94ce60e5da', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='')
+            #mc_embed_signup_scroll
+              label(for='mce-EMAIL') Join our email list to be notified when we post about once/month
+              <br>
+              #mc_embed_signup_scroll
+                //label(for='mce-EMAIL', style='display:block') Subscribe to our mailing list
+                input#mce-EMAIL.email(type='email', value='', name='EMAIL', placeholder='email address -- we never spam', required='')
+                // real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                div(style='position: absolute; left: -5000px;', aria-hidden='true')
+                  input(type='text', name='b_262c11ce96e8bc9ddb6d07ea8_968245194c', tabindex='-1', value='')
+              .clear
+                input#mc-embedded-subscribe.button(type='submit', value='Subscribe', name='subscribe')
+          // End MailChimp Signup Form          
+
+                   
+                          
+

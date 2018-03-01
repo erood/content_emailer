@@ -1,0 +1,114 @@
+//********begin manual extend layout paste*****************
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='theme-color' content='#4DA5F4')
+    meta(name='csrf-token', content=_csrf)
+    title #{title} - Hackathon Starter
+    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+  include partials/header
+
+  .container
+    include partials/flash
+    block content
+
+  include partials/footer
+
+  script(src='/js/lib/jquery-2.2.4.min.js')
+  script(src='/js/lib/bootstrap.min.js')
+  script(src='/js/main.js')
+
+  // Google Analytics: change UA-XXXXX-X to be your site's ID
+  script.
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-XXXXX-X', 'auto');
+    ga('send', 'pageview');
+  //*****************end manual extend layout paste*****************//
+block content
+  html
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css')
+    link(rel='stylesheet', href='css/style.css')
+    link(rel='stylesheet', type='text/css', href='css/launch_main.css')
+    link(rel='stylesheet', type='text/css', href='css/launch_devices.css')
+  body
+    #prices.header
+      .container-sml.text-center
+        .col-12
+          #prices.heading
+            | Pricing Plans
+          br
+          br
+
+    .wrapper.center
+      //.container-lrg
+        .col-12.h3.subheading.text-center Test test
+        ul(style='list-style-type:disc')
+          li Create a schedule for your business
+          li Share schedules with employees through email, online, and text
+          li You enter your shifts, your employees indicate availability, and QuickShifts spits out all possible schedules given this information
+      #pack_1_25.package
+        h3.subheading From 1-25 Employees
+        .price $9/month
+        .ctas
+          form(action='/charge', method="post")
+            script(
+              src="//checkout.stripe.com/v2/checkout.js",
+              data-label = "Sign up",
+              class="stripe-button",
+              data-key="pk_test_lB99dEOIUK57XPxw7dt3Vbxc",
+              data-locale="auto",
+              data-description="1-25 Employees",
+              data-amount="900")
+      #pack_26_50.package
+        h3.subheading Up to 50 Employees
+        .price $19/month
+        .ctas
+          form(action='/charge', method="post")
+            script(
+              src="//checkout.stripe.com/v2/checkout.js",
+              data-label = "Sign up",
+              class="stripe-button",
+              data-key="pk_test_lB99dEOIUK57XPxw7dt3Vbxc",
+              data-locale="auto",
+              data-description="1-25 Employees",
+              data-amount="1900")
+      #pack_51_up.package
+        h3.subheading Over 50 Employees
+        .price Custom Pricing
+        .ctas
+          a.button.stripe-button-el(href='/contact') Contact Us
+
+      .heading.text--center
+        br
+        | Frequently Asked Questions
+      .feature2
+        #two-feature.container-lrg.flex
+          .col-6
+            br
+            h3.subheading Can I try it before I buy it?
+            p.paragraph
+              | Yep! We offer a 30-day free trial. After that, if you're finding the product useful (which we think you will), you can select from the paid plans above.
+            br
+            br
+            br
+            br
+          .col-6
+            br
+            h3.subheading What if I grow?
+            p.paragraph
+              | You can change plans at anytime. If you need to upgrade, just log in to your account, click on your name, and select 'Accounts & Billing' to see your options.
+            br
+            br

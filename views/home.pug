@@ -1,0 +1,3915 @@
+//being manual extend layout
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='theme-color' content='#4DA5F4')
+    meta(name='csrf-token', content=_csrf)
+    title Find-me
+    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+    include partials/header
+
+
+    .container
+      include partials/flash
+      block content
+
+    include partials/footer
+
+    
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');
+
+
+//end manual extend layout paste (interferes with background image, account jquery dropdown)
+
+block content
+  //if not signed up, show landing page
+  //if signed up, show key stats on home page
+  if user
+    head
+      //jquery
+      script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+      //dataTables
+      script(src='https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js') 
+      script(src='https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js')
+      //dataTables responsive
+      script(type='text/javascript', src='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.js') 
+
+      
+      link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.css')      
+      //dataTables css
+      link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css')
+
+      //yadcf
+      //yadcf docs: http://yadcf-showcase.appspot.com/DOM_source_select2.html
+      script(src='https://cdnjs.cloudflare.com/ajax/libs/yadcf/0.9.1/jquery.dataTables.yadcf.js')
+      link(href='https://yadcf-showcase.appspot.com/resources/css/jquery.dataTables.yadcf.css ', rel='stylesheet', type='text/css')
+
+      script.
+
+        $.get(
+            "https://api.iextrading.com/1.0/stock/aapl/price",
+            {paramOne : 1, paramX : 'abc'},
+            function(data) {
+            alert('page content: ' + data);
+            }
+        );
+
+        /* Custom filtering function which will search data in column four between two values */
+        $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        //var cat = $('#cat').val();
+        //console.log(cat)
+
+        var age = parseFloat( data[3] ) || 0; // use data for the age column
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+        ( isNaN( min ) && age <= max ) ||
+        ( min <= age   && isNaN( max ) ) ||
+        ( min <= age   && age <= max ) )
+        {
+        return true;
+        }
+        return false;
+        }
+        );
+        $(document).ready(function() {
+
+          $('#example').DataTable( {
+            responsive: true,
+            "pagingType": "simple",
+            "paging": true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: 3 },
+                { responsivePriority: 3, targets: 4 },
+            ],
+
+            } );
+
+
+        var table = $('#example').DataTable();
+        // Event listener to the two range filtering inputs to redraw on input
+        $('#min, #max').keyup( function() {
+        table.draw();
+
+        } );
+
+        yadcf.init(table, [
+          {
+          column_number : 2,
+          filter_type: "text",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_default_label: "Content type",
+          filter_container_id: 'content_type_filter'
+
+          },
+          {
+          column_number : 3,
+          filter_type: "select",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_default_label: "Category",
+          filter_container_id: 'category_filter'
+          },
+          {
+          column_number : 4,
+          filter_type: "range_number",
+          filter_container_id: 'audience_size_filter'
+          },
+          {
+          column_number : 5,
+          filter_type: "range_number",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_container_id: 'pricing_filter'
+          },
+          ]);
+        } );
+      script(type='text/javascript').
+
+        var CSRF_HEADER = 'x-csrf-token';
+        window.onload = function start(){
+
+            //allow submitting with enter key - Goals Form
+            $('#goals_form').keydown(function(e) {
+            var key = e.which;
+            if (key == 13) {
+            // As ASCII code for ENTER key is "13"
+            document.getElementById("goals_form").submit();
+            }
+            });
+
+
+            //allow submitting with enter key - Weight Form
+            $('#weight_form').keydown(function(e) {
+            var key = e.which;
+            if (key == 13) {
+            // As ASCII code for ENTER key is "13"
+            document.getElementById("weight_form").submit();
+            }
+            });
+
+            //if goals blank, will need to run goal_show_hide() and prompt to enter goals
+            //goal_show_hide();
+        };
+
+
+
+
+    //************************************************************//
+    //************************Begin pug**************************//
+    //***********************************************************//
+    //br
+    //#blurb.container(style='width:80%;padding-top:10px;padding-bottom:10px;text-align:center')
+      h4 Advertisers - Help people find your business
+      .p(style='font-size:110%') Sponsor content being viewed by the people you're trying to reach. Explore our growing list of content creators below, for free.
+      br
+      .p(style='font-size:110%') Creator looking to receive sponsorship offers?
+      a(style='font-size:110%;color:#4d90fc')(href='http://www.find-me.co/records') Fill out our form, and we'll add you to our list
+    .container
+      .row
+        .container
+          #domains.h4 Filters
+          .col-md-2
+            span(style='display:inline-block;font-size:110%') Content type(s):
+            br
+            span(style='display:inline-block;margin-left:1px;margin-top:7px;')#content_type_filter
+            hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
+          .col-md-2
+            span(style='display:inline-block;font-size:110%') Category:
+            br
+            span(style='display:inline-block;margin-left:1px;margin-top:7px;')#category_filter
+            hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
+          .col-md-2
+            span(style='display:inline-block;font-size:110%') # impressions:
+            br
+            span(style='display:inline-block;margin-left:1px;margin-top:2px;')#audience_size_filter
+            hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
+      br
+    .container
+      #domains.h4 Content creators
+      table#example.cell-border.hover.responsive(cellspacing='0', width='100%')
+        thead(style="background-color: #115fd8;color:#fff")
+          tr
+            th Name
+            th Description
+            th Content type(s)
+            th Category
+            th Impressions (per ad)
+            th Pricing (per ad)
+            th Contact
+        tbody
+          tr
+            td
+              a(href='https://www.mescale.co') Mescale
+            td Fitness/weight loss enthusiasts. Mostly U.S./Europe-based.
+            td Newsletter
+            td Fitness
+            td 900
+            td $20
+            td
+              a(href='mailto:hi@mescale.co') Contact
+          tr
+            td
+              a(href='http://sidebar.io') Sidebar
+            td Mostly web and graphic designers, with a few developers thrown in. Mostly U.S. and Europe-based.
+            td Newsletter
+            td Technology
+            td 20,000
+            td $950
+            td
+              a(href='mailto:sponsor@sidebar.io') Contact
+          tr
+            td
+              a(href='https://www.WanderWithJo.com') Wander With Jo
+            td Females based in US and SE Asia, 25-35 years is primary blog audience.
+            td Display
+            td Travel
+            td 10,000
+            td $100
+            td
+              a(href='mailto:wanderwithjo@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.hoiannow.com') Hoi An Now
+            td Tourists and expats in central Vietnam. Interested in travel, food, culture, etc. 
+            td Display
+            td Travel
+            td 6,000
+            td $400
+            td
+              a(href='mailto:nowhoian@gmail.com') Contact
+          tr
+            td
+              a(href='http://www.driverlesstransportation.com') Driverless Transportation
+            td Interested in cutting-edge technology such as connected cars, driverless cars, new innovations in transportation, etc.
+            td
+              span Newsletter
+              br
+              br  
+              span Display
+            td Technology
+            td 10,000
+            td $400
+            td
+              a(href='mailto:jennifer@driverlesstransportation.com') Contact
+          tr
+            td
+              a(href='https://ecophiles.com') Ecophiles
+            td Over 70% readers based in the US and UK. 52% Female. 22% 25-34 age group, 25% 35-44 age group. 74% College educated and above. 30% with income above 100,000.
+            td Display
+            td Travel
+            td 5,000
+            td $200
+            td
+              a(href='mailto:team@ecophiles.com') Contact
+          tr
+            td
+              a(href='https://www.freefoodguy.com') Free Food Guy
+            td People interested in free food deals, U.S. and Canada.
+            td Newsletter
+            td Food
+            td 3,000
+            td $50
+            td
+              a(href='mailto:hello@freefoodguy.com') Contact
+          tr
+            td
+              a(href='http://www.CleanTechnica.com') CleanTechnica
+            td People interested in clean technology news. 50% US based readership.
+            td
+              span Newsletter
+              br
+              br  
+              span Display
+              br
+              br  
+              span Sponsored post
+            td Technology
+            td 15,000
+            td $500
+            td
+              a(href='mailto:accounts@importantmedia.org') Contact
+          tr
+            td
+              a(href='http://www.thehardtimes.net') The Hard Times
+            td Music and comedy fans. U.S. based.
+            td
+              span Sponsored post
+              br
+              br  
+              span Instagram
+              
+            td Music
+            td 80,000
+            td $2,500
+            td
+              a(href='mailto:matt@thehardtimes.net') Contact
+          tr
+            td
+              a(href='http://www.big-inning.com') The Big Inning
+            td Baseball fans, and other sports fans, primarily U.S. readers between 20-60 yrs old.
+            td
+              span Sponsored post
+              br
+              br  
+              span Newsletter
+              
+            td Sports
+            td 1,000
+            td $15
+            td
+              a(href='http://twitter.com/big_inning') Contact
+          tr
+            td
+              a(href='http://www.trendintech.com') TrendinTech
+            td Health, space, science, gadgets, robots, research. Audience 65% U.S., 70% male.
+            td
+              span Sponsored post
+              br
+              br  
+              span Newsletter
+              
+            td Technology
+            td 850,000
+            td $2,500
+            td
+              a(href='mailto:Editor@trendintech.com') Contact
+          tr
+            td
+              a(href='http://www.Recomendo.com') Recomendo
+            td People interested in useful websites, travel, gear, books, tools, electronics.
+            td
+              span Newsletter
+            td Technology
+            td 13,000
+            td $200
+            td
+              a(href='mailto:Mark@boingboing.net') Contact
+          tr
+            td
+              a(href='http://futurethinkers.org/') Future Thinkers
+            td Educated people interested in technology, entrepreneurship, investing, travel, and self development. Ages 20-45. 75% Male, 50% US-based, rest in Western Europe, Australia, Canada.
+            td
+              span Podcast
+              br
+              br  
+              span Videos
+              br
+              br  
+              span Social media post
+              br
+              br  
+              span Display
+            td Technology
+            td 55,000
+            td $5,000
+            td
+              a(href='mailto:contact@futurethinkers.org') Contact
+              br
+              span(style='font-size:80%') (put 'Ad placement' in subject line)
+          tr
+            td
+              a(href='http://www.paperluggage.com/') Paper Luggage
+            td People interested in unique travel stories. World-travellers, curious and worldly people of all ages (mainly 16-55).
+            td
+              span Sponsored post
+            td Travel
+            td 2,000
+            td $20
+            td
+              a(href='mailto:bjd2127@columbia.edu') Contact
+          tr
+            td
+              a(href='https://geektyrant.com/') Geek Tyrant
+            td Geek entertainment news. Primarily U.S. audience.
+            td
+              span Display
+              br
+              br  
+              span Video
+            td Lifestyle
+            td 7,000,000
+            td
+            td
+              a(href='https://geektyrant.com/advertising') Contact
+          tr
+            td
+              a(href='http://www.redorbit.com/') redOrbit
+            td Tech-oriented and computer-savvy individuals interested in content related to space, science, health and technology. 55% male. 80% of audience between 25-49 years old. 85% of audience is U.S. based. 85% of audience have income over $65,000/year.
+            td
+              span Display
+              br
+              br  
+              span Video
+            td Technology
+            td 70,000,000
+            td
+            td
+              a(href='mailto:advertising@www.redorbit.com') Contact
+          tr
+            td
+              a(href='https://shuftipro.com') Shufti Pro
+            td Shufti Pro allows users to verify ID cards, passports, driver's licenses, credit cards, utility bills, and more.
+            td
+              span Display
+            td Technology
+            td 2,000
+            td $100
+            td
+              a(href='https://www.twitter.com/alyhsn_') Contact
+          tr
+            td
+              a(href='http://www.thelostpassport.com') The Lost Passport
+            td Solo and intrepid travelers heading to Asia / Australia. Primarily U.S. based.
+            td
+              span Display
+              br
+              br  
+              span Sponsored post
+            td Travel
+            td 8,000
+            td $120
+            td
+              a(href='mailto:thelostpassportblog@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.thewhiteisle.co.uk') The White Isle - Ibiza Blog
+            td Tourists, summer workers and locals living, working and visting the island of Ibiza. Aimed at families, mature couples and those looking for the club side of the island.
+            td
+              span Display
+              br
+              br  
+              span Sponsored post
+            td Travel
+            td 30,000
+            td $80
+            td
+              a(href='mailto:thelostpassportblog@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.pixelstech.net') Pixelstech
+            td A platform for programmers to share knowledge and experience.
+            td
+              span Display
+              br
+              br  
+              span Sponsored post
+            td Technology
+            td 2000
+            td $50
+            td
+              a(href='mailto:info@pixelstech.net') Contact
+          tr
+            td
+              a(href='https://www.thefightingcock.co.uk') The Fighting Cock
+            td Football (soccer) fans. Primarily UK-based (57%).
+            td
+              span Podcast
+              br
+              br  
+              span Sponsored post
+              br
+              br
+              span Display
+            td Sports
+            td 1,000,000
+            td $150
+            td
+              a(href='mailto:markjcasey@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.feastingonfruit.com') Feasting Fruit
+            td Food blog - health conscious, mostly female (92%), moms, mostly US based (52%), young (50% between the ages of 18-35). Vegans, gluten free.
+            td
+              span Display
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Social media post
+              br
+              br
+              span Recipe Development
+            td Food
+            td 350,000
+            td $500
+            td
+              a(href='mailto:natalie@feastingonfruit.com') Contact
+          tr
+            td
+              a(href='http://www.css-weekly.com') CSS Weekly
+            td Front-End Developers, UX & UI designers. Primarily U.S based (USA 53.5%, United Kingdom 6.8%, Germany 4.7%).
+            td
+              span Newsletter
+            td Technology
+            td 19000
+            td $500
+            td
+              a(href='mailto:info@css-weekly.com') Contact
+          tr
+            td
+              a(href='www.armchairallamericans.com') Armchair All Americans
+            td Sports fans (primarily 18-40) (95% traffic in the U.S.)
+            td
+              span Display
+              br
+              br
+              span Social media 
+              br
+              br
+              span Videos
+            td Sports
+            td 100,000
+            td $500
+            td
+              a(href='mailto:andrew@armchairallamericans.com') Contact
+          tr
+            td
+              a(href='http://www.mixmag.net/') Mixmag
+            td Digital provides news covering music, technology, fashion. Also operate magazine covering same topics. Audience is ~25% male, 31% UK, 17% US. 
+            td
+              span Display
+              br
+              br
+              span Magazine
+              
+              
+            td Music
+            td 4,000,000
+            td
+            td
+              a(href='mailto:juliet@mixmagmedia.com') Contact
+          tr
+            td
+              a(href='https://www.fstoppers.com/') Fstoppers
+            td Photography community. Site provides news and video covering professional photography. 95% of users identify as at least amateur photographers. Audience predominantly aged 18-35.
+            td
+              span Display
+              br
+              br
+              span Sponsored post
+              
+              
+            td Photography
+            td 5,000,000
+            td $2,000
+            td
+              a(href='mailto:david@fstoppers.com') Contact
+              //more detail here: https://d1w5usc88actyi.cloudfront.net/fstoppers-media-kit-201708.pdf?_ga=2.30478975.1357877243.1506138291-139220452.1506138291
+          tr
+            td
+              a(href='https://www.elevenwarriors.com/') Eleven Warriors
+            td As the largest college team-specific site on the internet, Eleven Warriors welcomes millions of Ohio State and college sports fans. 90% male, 67% between the ages of 25–54, 35% earn more than $100,000 per year; 73% earn more than $50,000, 80% have attained a college degree; 28% have a post-graduate degree.
+            td
+              span Display
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Podcast
+              
+              
+            td Sports
+            td 1,500,000
+            td 
+            td
+              a(href='mailto:advertise@elevenwarriors.com') Contact
+          tr
+            td
+              a(href='http://www.droid-life.com/') Droid Life
+            td Droid Life is an online blog covering Android news, reaching millions of tech enthusiasts each month, the majority of which are in the US.
+            td
+              span Display
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Newsletter
+              
+              
+
+            td Technology
+            td 1,000,000
+            td 
+            td
+              a(href='http://www.droid-life.com/contact')  Contact
+          tr
+            td
+              a(href='http://www.flowingdata.com') Flowing Data
+            td Blog for statistics and data visualization, and is frequented by data-savvy readers who are interested in such. 
+            td
+              span Display
+              br
+              br
+              span RSS Feed Sponsorship
+            td Technology
+            td 1,100,000
+            td $500
+            td
+              a(href='mailto:nathan@flowingdata.com') Contact
+          tr
+            td
+              a(href='http://www.producerspot.com/') Producer Spot
+            td Covers electronic music producers, musicians, composers, DJs, sound engineers, etc. Best for promoting music software, plugins, sample packs, audio services, instruments, music business and more.
+            td
+              span Display
+            td Music
+            td 220,000
+            td $1,100
+            td
+              a(href='mailto:info@producerspot.com') Contact
+          tr
+            td
+              a(href='https://www.inquisitr.com/') Inquisitr
+            td Pop culture news website, 56% female 44% male. 43% are between the ages of 25-44 and 28% are between the ages of 45-64. 51% make an income of above $50,000 a year. 58% have a college degree or higher.
+            td
+              span Display
+            td News
+            td 1,000,000
+            td 
+            td
+              a(href='mailto:advertise@inquisitr.com') Contact
+          tr
+            td
+              a(href='https://psdrepo.com/') PSD Repo
+            td Repository of .psd files. Designers, front-end developers, tech-saavy individuals. Primarily U.S.-based.
+            td
+              span Display
+              br
+              br
+              span Social media 
+            td Design
+            td 250,000
+            td 
+            td
+              a(href='mailto:hello@psdrepo.com') Contact
+          tr
+            td
+              a(href='https://www.episodecalendar.com') Episode Calendar
+            td TV show calendar to know when your next episodes are airing, helping track watched progress, and discover new TV shows. 80% aged 18-34. 60% male. 20% US, 60% Europe, 20% rest of world. 
+            td
+              span Display
+              br
+            td Entertainment
+            td 15,000
+            td 
+            td
+              a(href='mailto:kristian@frexity.com') Contact
+          tr
+            td
+              a(href='http://www.Wrightplacetv.com') Wrightplacetv.com
+            td Entrepreneurs who want to use media to grow their business. 
+            td
+              span Sponsored post
+              br
+              br
+              span Social media
+              br
+              br
+              span Videos
+            td Business
+            td 102,000
+            td $100
+            td
+              a(href='mailto:info@wrightplacetv.com') Contact
+          tr
+            td
+              a(href='https://futureengineerscamp.com/') Future Engineers Camp
+            td Elementary and middle school students of high income families based in Silicon Valley. Interested in educational products with an emphasis in technology. Partnerships welcome.
+            td
+              span Sponsored post
+              br
+              br
+              span Email newsletter
+              br
+              br
+              span Flyers
+            td Business
+            td 2,000
+            td $100
+            td
+              a(href='mailto:contact@futureengineerscamp.com') Contact
+          tr
+            td
+              a(href='http://www.travelindicator.com/') Travel Indicator
+            td Tech and travel savvy digital nomads, expats and travel enthusiasts, predominantly from the US and Europe.
+            td
+              span Sponsored post
+              br
+              br
+              span Display
+              
+            td Business
+            td 3,000
+            td $250
+            td
+              a(href='https://www.twitter.com/travlindicator') Contact
+          tr
+            td
+              a(href='http://tumblr.macleodsawyer.com') Macleod Sawyer
+            td Primarily 13-22 age range, US based. Posts about education, history, politics, science, and technology.
+            td
+              span Sponsored post
+              br
+              br
+              span Display
+            td Education
+            td 50,000
+            td $50
+            td
+              a(href='mailto:macleod@macleodsawyer.com') Contact
+          tr
+            td
+              a(href='https://betalist.com') Betalist
+            td Site focused specifically on early-stage internet startups. Audience of early adopters and startup founders coming to the website for one reason: sign up for new services. Website, newsletter, and Twitter accounts all active.
+            td
+              span Sponsored post
+              br
+              br
+              span Social media
+              br
+              br
+              span Newsletter  
+            td Technology
+            td 100,000
+            td $900
+            td
+              a(href='mailto:advertise@betalist.com') Contact
+          tr
+            td
+              a(href='https://sharewareonsale.com/') SharewareOnSale
+            td  SharewareOnSale is a community of tech lovers — people that ready to use software, apps, services, and more. Audience mainly US, Europe.
+            td
+              span Sponsored post
+              br
+              br
+              span Newsletter  
+              
+              
+            td Technology
+            td 500,000
+            td 
+            td
+              a(href='mailto:advertise@sharewareonsale.com') Contact
+          tr
+            td
+              a(href='http://nofilmschool.com/') No Film School
+            td Site dedicated to film-making, with tech-hungry filmmakers, avid film fans, and independent creatives. 
+            td
+              span Sponsored post
+              br
+              br
+              span Newsletter  
+              
+              
+            td Film
+            td 500,000
+            td 
+            td
+              a(href='mailto:sean@nofilmschool.com') Contact
+          tr
+            td
+              a(href='http://www.sherdog.com/') Sherdog
+            td Site dedicated to mixed martial arts coverage. Audience primarily male, US, Europe.
+            td
+              span Sponsored post
+              br
+              br
+              span Newsletter  
+            td Sports
+            td 10,000,000
+            td 
+            td
+              a(href='http://www.sherdog.com/advertising#adv_frm') Contact
+          tr
+            td
+              a(href='http://www.synthtopia.com/') Synthtopia
+            td Synthtopia is one of the most popular resources for synthesizer and electronic music news on the Internet.
+            td
+              span Sponsored post
+              br
+              br
+              span Newsletter  
+              br
+              br
+              span Display
+              br
+              br
+              span Competitions
+            td Music
+            td 330,000
+            td 
+            td
+              a(href='https://twitter.com/ElisabethLewin') Contact
+          tr
+            td
+              a(href='https://usepanda.com/newsletter.html') Panda
+            td A newsletter for everything important in design and technology. Presenting the most popular articles, inspiration and products in one place.
+            td
+              span Newsletter  
+            td Technology
+            td 40,000
+            td 
+            td
+              a(href='mailto:william@panda.network') Contact
+          tr
+            td
+              a(href='http://www.oneminutetrader.tv') One Minute Trader
+            td Stock trading community. 68% male, Finance/Business related, ~70% have income over $175,000. ~23% have a net worth over $2,000,000.
+            td
+              span Social media
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Podcast
+              br
+              br
+              span Newsletter  
+            td Business
+            td 20,000
+            td $250
+            td
+              a(href='mailto:matt@oneminutetrader.tv') Contact
+          tr
+            td
+              a(href='https://www.transparentcareer.com/') Transparent Career
+            td MBA students, alumni, applications interested in job market.
+            td
+              br
+              span Newsletter
+              br
+            td Career
+            td 11000
+            td $1000
+            td
+              a(href='mailto:kevin@transparentcareer.com') Contact
+          tr
+            td
+              a(href='http://www.failory.com') Failory
+            td Entrepreneurs and startup owners. Primarily U.S. based.
+            td
+              span Sponsored post
+              br
+              br
+              span Newsletter
+              br
+            td Business
+            //technology
+            td 300
+            td $10
+            td
+              a(href='mailto:hello@failory.com') Contact
+          tr
+            td
+              a(href='http://www.techcrackblog.blogspot.com') Tech Crack Blog
+            td Technology geeks, gadgets, how to, apps, gaming etc.
+            td
+              span
+              | Sponsored post
+              br
+              br  
+              span
+              | Newsletter
+              br
+              
+            td Technology
+            td 1,000
+            td $20
+            td
+              a(href='mailto:techcrackblog@gmail.com') Contact
+          tr
+            td
+              a(href='http://www.jimmydaly.com/subscribe/') The Swipe File Newsletter
+            td Advertisers, creatives, people interested in productivity/work output.
+            td
+              br
+              span Newsletter
+              br
+            td Productivity
+            td 1400
+            td $100
+            td
+              a(href='mailto:runjimdaly@gmail.com') Contact
+          tr
+            td
+              a(href='http://www.growthcafe.studio/') Growthcafe
+            td Digital marketers, venture capitalists, startup fans, developers and entrepreneurs to gather information about the latest in growth hacking, innovation, technology and digital entrepreneurship.
+            td
+              span Sponsored post
+              br
+              br
+            td Technology
+            td 2,000
+            td $300
+            td
+              a(href='mailto:m.vandenavont@fraseo.be') Contact
+          tr
+            td
+              a(href='http://www.thisistucson.com') This is Tucson
+            td Millennial women in Tucson, Arizona. 66% of our audience is women. 60% of the women in our audience are under age 45.
+            td
+              span Sponsored post
+              br
+              br
+              span Social media
+              br
+              br
+              span Newsletter
+            td Lifestyle
+            td 54,000
+            td 
+            td
+              a(href='mailto:bpallack@tucson.com') Contact
+          tr
+            td
+              a(href='https://www.robopal.us/') Robopal
+            td Robot tool used to help learn to code. Audience is comprised parents who want to interact with their children while learning about programming and adults interested in robotics who want to learn basic coding.
+            td
+              span Newsletter
+              br
+              br
+              span Social media
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Video  
+            td Technology
+            td 10,000
+            td $100
+            td
+              a(href='mailto:lsong@itiwant.us') Contact
+          tr
+            td
+              a(href='https://www.instagram.com/itstheoenophile') The Oenophile [Instagram]
+            td Middle aged men and women in higher income brackets. Wine lovers and foodies alike. Good representation in Europe, France and UK especially.
+            td
+              br
+              span Social media
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Video  
+            td Technology
+            td 7,000
+            td 
+            td
+              a(href='mailto:jac220@lehigh.edu') Contact
+          tr
+            td
+              a(href='http://www.theoreocat.com') The Oreo Cat
+            td Pet minded people. Pet owners. Cat enthusiasts.
+            td
+              br
+              span Social media
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Video  
+            td Pets
+            td 2,000
+            td $250
+            td
+              a(href='mailto:theoreocatofficial@gmail.com') Contact
+          tr
+            td
+              a(href='https://savetheearth.coop/') Save the Earth
+            td Evnironmentally conscious individuals, healthy eaters (Vegan, plant-based diets, etc) 50% UK 30% UK 20% Canada, 10 % Australia. 40k real and responsive social media audience, pretty equal male/female visitors, age range 25 - 60, average household income $100k - $200k.
+            td
+              br
+              span Social media
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Newsletter  
+            td Environment
+            td 3,000
+            td $70
+            td
+              a(href='mailto:emlyn@savetheearth.coop') Contact
+              br
+              span(style='font-size:80%') Also have syndicate of other social media admins and groups to total 1 million followers, price dependent on reach.
+          tr
+            td
+              a(href='https://www.locationindependent.co.uk') Location Independent
+            td Digital nomads and location independent entrepreneurs. UK/US based audience.
+            td
+              br
+              span Display
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Video  
+            td Travel
+            td 20,000
+            td $100
+            td
+              a(href='https://www.locationindependent.co.uk/contact/') Contact
+          tr
+            td
+              a(href='http://www.xenstreet.com') XenStreet
+            td Covering views, news, and updates related to open source software, hardware, technology and community.
+            td
+              br
+              span Newsletter
+              br
+              br
+              span Sponsored post
+              br
+              br
+              span Social Media  
+            td Travel
+            td 8,000
+            td $300
+            td
+              a(href='mailto:subs@xenstreet.com') Contact
+          tr
+            td
+              a(href='https://tedium.co/') Tedium
+            td Geeky, tech-minded folks. Primarily U.S-based, male.
+            td
+              br
+              span Newsletter
+              br
+            td Technology
+            td 3,500
+            td $50
+            td
+              a(href='mailto:earnie@tedium.co') Contact
+          tr
+            td
+              a(href='https://ssbworld.com/') SSB World
+            td Video game players, primarily 15-25 year old, male.
+            td
+              br
+              span Newsletter
+              br
+            td Gaming
+            td 600
+            td $20
+            td
+              a(href='mailto:contactssbworld@gmail.com') Contact
+          tr
+            td
+              a(href='https://getputpost.co') Get Put Post
+            td Email newsletter about APIs. Audience of developers interested in APIs, building applications.
+            td
+              br
+              span Sponsored post
+              br
+            td Technology
+            td 1100
+            td 
+            td
+              a(href='mailto:gwintrob+getputpost@gmail.com') Contact
+          tr
+            td
+              a(href='http://www.colossalumbrella.com') Colossalumbrella
+            td First time parents and moms-to-be. Individuals focused on health and travel.
+            td
+              br
+              span Display
+              br
+              span Sponsored post
+              br
+            td Parenting
+            td 1000
+            td $3
+            td
+              a(href='mailto:colossalumbrella@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.foodanddating.com/') Food and Dating
+            td Food & Dating Magazine is for foodies and lovers, where you find new food and dating ideas and recreate them on date nights. 80% female, mainly U.S.-based.
+            td
+              br
+              span Display
+              br
+              span Sponsored post
+              br
+            td Food
+            td 3,000
+            td $10
+            td
+              a(href='mailto:pituk@byxmedia.com') Contact
+          tr
+            td
+              a(href='https://www.fyxes.com/') Fyxes
+            td Online publication focused on the latest stories about startups.
+            td
+              br
+              span Display
+              br
+              span Sponsored post
+              br
+            td Technology
+            td 3,000
+            td $10
+            td
+              a(href='mailto:pituk@byxmedia.com') Contact
+          tr
+            td
+              a(href='https://mapchart.net/') Mapchart
+            td Wide range of individuals (ages 12-40) as it is a simple tool that anyone can use to create a map. Some categories include teachers, students, salespeople, geography/history enthusiasts, etc. Primarily from the US, UK and Canada (50, 9 and 4% respectively).
+            td
+              br
+              span Display
+              br
+              span Sponsored post
+              br
+            td Technology
+            td 6,000
+            td $600
+            td
+              a(href='mailto:contact@mapchart.net') Contact
+          tr
+            td
+              a(href='https://www.activeman.com/') ActiveMan
+            td Lifestyle-focused publication on men interested in fitness, nutrition, etc. Audience is 70% male and 30% female.
+            td
+              span Display
+              br
+              br 
+              span Sponsored post
+              br
+            td Fitness
+            td 3,000
+            td $10
+            td
+              a(href='mailto:pituk@byxmedia.com') Contact
+          tr
+            td
+              a(href='https://youtube.com/beautymantraindia') Youtube - Beauty Mantra
+            td Beauty Mantra is a Youtube channel targeted towards Indian women interested in fashion, style, beauty and fitness.
+            td
+              br
+              span Video
+              br
+            td Fitness
+            td 100,000
+            td $200
+            td
+              a(href='mailto:vikram@beauty-mantra.com') Contact
+          tr
+            td
+              a(href='http://www.therowlinglibrary.com') The Rowling Library
+            td Digital magazine for Harry Potter fans. Young adult readers, movie lovers.
+            td
+              br
+              span Digital magazine
+              br
+            td Fitness
+            td 2,000
+            td $50
+            td
+              a(href='mailto:patriciotarantino@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.socialmediaexaminer.com/sponsor/') Social Media Examiner
+            td Blog focused on social media and social media marketing. Publishes detailed 'how to' articles and along with reviews of social media tools, etc. 19% self-employed, 59% work for a company with 2 to 99 employees, 12% 100 to 499 employees, 10% 500+ employees. 41% B2B and 59% B2C.
+            td
+              br
+              span Newsletter
+              br
+              span Sponsored post
+              br
+            td Advertising
+            td 500,000
+            td 
+            td
+              a(href='mailto:Emily@socialmediaexaminer.com') Contact
+          tr
+            td
+              a(href='https://www.searchenginejournal.com/advertise/') Search Engine Journal 
+            td Blog focused on digital marketing, SEO, content marketing, and paid search. Visitors are marketers looking for the best tools, tips, and strategies. Pricing varies depending on ad format, length.
+            td
+              br
+              span Display
+              br
+              span Sponsored post
+              br
+              span Newsletter
+              br
+            td Advertising
+            td 600,000
+            td 
+            td
+              a(href='mailto:jessica@searchenginejournal.com') Contact
+          tr
+            td
+              a(href='https://www.marketingweek.com/advertising-information/') Marketing Week
+            td Blog focused on digital marketing, brand marketing. Visitors are marketers looking for the best tools, tips, and strategies. Pricing varies depending on ad format, length.
+            td
+              br
+              span Display
+              br
+              span Newsletter
+              br
+              span Print
+              br
+            td Advertising
+            td 942,000
+            td 
+            td
+              a(href='mailto:advertising@centaurmedia.com') Contact
+          tr
+            td
+              a(href='https://theleafsnation.com/advertise-with-us/') The Leafs Nation
+            td Blog covering the Toronto Mapleleafs, a member of the National Hockey League. 96% male, Canada/U.S.-focused, 50% visitors 18-34 years old. Pricing varies depending on ad format, length.
+            td
+              br
+              span Display
+              br
+            td Sports
+            td 1,000,000
+            td 
+            td
+              a(href='mailto:josh@oilersnation.com') Contact
+          tr
+            td
+              a(href='http://mediakit.bevnet.com/brewbound') Brewbound
+            td Blog and email newsletter publication covering craft beer. Audience of craft brewers, distributors, and industry professionals. Pricing varies depending on ad format, length.
+            td
+              span Newsletter
+              br
+              span Display
+            td Lifestyle
+            td 35,000
+            td $3,000
+            td
+              a(href='mailto:sales@bevnet.com') Contact
+          tr
+            td
+              a(href='http://startupresources.io/') Startup Resources
+            td Entrepreneurs, designers, agencies looking for the best tools and resources to use for their business.
+            td
+              span Newsletter
+            td Business
+            td 700
+            td $69
+            td
+              a(href='mailto:info@startupresources.io') Contact
+          tr
+            td
+              a(href='https://www.techpally.com') Tech Pally
+            td Computer and gadget users, programmers, business-driven individuals. Visitors primarily from US, UK, Australia, Germany, India (in that order).
+            td
+              span Sponsored post
+              br
+              span Display
+            td Technology
+            td 1,000
+            td $10
+            td
+              a(href='mailto:chaktty@gmail.com') Contact
+          tr
+            td
+              a(href='https://www.healthpally.com') Health Pally
+            td Health-concious individuals interested in health and nutrition news and research. Primarily U.S.-based.
+            td
+              span Sponsored post
+              br
+              span Display
+            td Fitness
+            td 1,000
+            td $10
+            td
+              a(href='mailto:chaktty@gmail.com') Contact
+          tr
+            td
+              a(href='https://benrmatthews.com') Ben Matthews
+            td Freelancers interested in productivity, technology, and marketing. 
+            td
+              span Newsletter
+            td Business
+            td 1,600
+            td 
+            td
+              a(href='mailto:ben@montfort.io') Contact
+          tr
+            td
+              a(href='https://tinyletter.com/randomroundup') Random Roundup
+            td People interested in technology, productivity, futurism. Geeky, smart audience.
+            td
+              span Newsletter
+            td Business
+            td 200
+            td 
+            td
+              a(href='mailto:howzit@jonathanberkowitz.me') Contact
+          tr
+            td
+              a(href='http://fortheinterested.com/') For the Interested
+            td People who value self-improvement, continuous learning, productivity hacks. Motivated audience of professionals across variety of industries.
+            td
+              span Newsletter
+            td Business
+            td 5,000
+            td 
+            td
+              a(href='mailto:josh@joshspector.com') Contact
+          tr
+            td
+              a(href='https://tldrmarketing.com') tl;dr Marketing
+            td Marketers interested in organic, paid, and social media marketing news.
+            td
+              span Newsletter
+            td Marketing
+            td 120
+            td 
+            td
+              a(href='mailto:iam@saijogeorge.com') Contact
+          tr
+            td
+              a(href='https://www.webdesignerdepot.com') Web Designer Depot
+            td Web designers interested in latest design news and tools (including discounts/deals for designer tools). 
+            td
+              span Newsletter
+            td Design
+            td 120,000
+            td $3,500
+            td
+              a(href='mailto:joel@webdesignerdepot.com') Contact
+          tr
+            td
+              a(href='https://thesweetsetup.com') The Sweet Setup
+            td Website covering Mac, iPhone, and iPad apps. Audience interested in technology, Apple products, productivity.
+            td
+              span Newsletter
+              br
+              span Display
+              br
+              span Sponsored post
+            td Technology
+            td 17,000
+            td $500
+            td
+              a(href='https://thesweetsetup.com/advertise/') Contact
+          tr
+            td
+              a(href='https://ponyfoo.com') Pony Foo
+            td A website and weekly newsletter covering the open web. Technical audience -- programmers interested in open source.
+            td
+              span Newsletter
+              br
+              span Display
+              br
+              span Sponsored post
+            td Technology
+            td 100,000
+            td $100
+            td
+              a(href='https://ponyfoo.com/weekly/submissions') Contact
+          tr
+            td
+              a(href='https://startupwatching.com/') Startup Watching
+            td Weekly newsletter with curated news and stories from the startup world. 
+            td
+              span Newsletter
+            td Technology
+            td 3,500
+            td $130
+            td
+              a(href='mailto:bram@startupwatching.com') Contact
+          tr
+            td
+              a(href='https://foundersgrid.com') Founders Grid
+            td Newsletter with highly engaged (60%+ open rate) audience of startup founders, VCs, tech workers.
+            td
+              span Newsletter
+            td Technology
+            td 6,000
+            td 
+            td
+              a(href='https://foundersgrid.com/partners/') Contact
+          tr
+            td
+              a(href='https://foundersgrid.com') Webmenu
+            td Directory of web applications. Audience of web app enthusiasts.
+            td
+              span Sponsored post
+              br
+              span Newsletter
+            td Technology
+            td 1,500
+            td 
+            td
+              a(href='http://webmenu.org/sponsor') Contact
+          tr
+            td
+              a(href='https://finimize.com') Finimize
+            td Finance news. Audience generally younger looking for brief/highly curated snippets of Finance news. 
+            td
+              span Newsletter
+            td Finance
+            td 100,000
+            td 
+            td
+              a(href='mailto:help@finimize.com') Contact
+          tr
+            td
+              a(href='https://www.smashingmagazine.com/about/') Smashing Magazine
+            td Online magazine for professional web designers and developers.
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+            td Design
+            td 1,000,000
+            td 
+            td
+              a(href='mailto:markus.seyfferth@smashingmagazine.com') Contact
+          tr
+            td
+              a(href='https://speckyboy.com/') Speckyboy
+            td Web blog and newsletter for professional web designers and developers.
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+            td Design
+            td 40,000
+            td 
+            td
+              a(href='mailto:mail@speckyboy.com') Contact
+          tr
+            td
+              a(href='http://uxmovement.com/') UX Movement
+            td A user experience blog that publishes articles showing how good and bad design practices affect user behavior. 
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+            td Design
+            td 50,000
+            td $150
+            td
+              a(href='http://uxmovement.com/sponsorship/') Contact
+          tr
+            td
+              a(href='https://www.artstation.com/about/') Art Station
+            td ArtStation is a hub for professional games, film, media and entertainment art, with millions of people using the platform.
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+            td Design
+            td 2,000,000
+            td 
+            td
+              a(href='mailto:advertise@artstation.com') Contact
+          tr
+            td
+              a(href='https://www.changelog.com/sponsor') Changelog
+            td Audience of engineers, hackers, developers, polyglots, backend, frontend, full-stack, operations, designers, and everything in between. Range of advertising options/pricing here (follow contact link for detail).
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+              br
+              span Podcast
+            td Technology
+            td 100,000
+            td $1,500
+            td
+              a(href='https://www.changelog.com/sponsor') Contact
+          tr
+            td
+              a(href='https://www.yourfirstinvestor.com/') Your First Investor
+            td Database with curated list of equity free funding options for startups. Audience comprised of entrepreneurs and aspiring entrepreneurs interested in startup funding, etc.
+            td
+              span Newsletter
+              br
+              span Sponsored Post
+              br
+              span Display
+            td Startups
+            td 30,000
+            td $200
+            td
+              a(href='https://yourfirstinvestor.com/advertisement_opportunities_q3_2017.pdf') Contact
+          tr
+            td
+              a(href='https://reactdigest.net/advertise') React Digest
+            td Highly targeted weekly newsletter for software programmers, freelancers, consultants, IT professionals and entrepreneurs that keeps them up to date on the latest news from the niche technology segment. 
+            td
+              span Newsletter
+            td Technology
+            td 1,600
+            td $35
+            td
+              a(href='https://reactdigest.net/advertise') Contact
+          tr
+            td
+              a(href='http://reactjsnewsletter.com/sponsorship') React.js Newsletter
+            td Highly targeted weekly newsletter with over 12,000 developers with an active interest in React and related technologies. 
+            td
+              span Display
+            td Technology
+            td 12,000
+            td $400
+            td
+              a(href='http://reactjsnewsletter.com/sponsorship') Contact
+          tr
+            td
+              a(href='http://bitcoinist.com/advertise/') Bitcoinist
+            td Site covers bitcoin and cryptocurrency news/prices. 
+            td
+              span Display
+            td Cryptocurrency
+            td 800,000
+            td 
+            td
+              a(href='http://bitcoinist.com/advertise/') Contact
+          tr
+            td
+              a(href='https://blockonomi.com/advertise/') Blockonomi
+            td Provides educational guides to blockchain and cryptocurrency. Covers mining, ICOs, fundamentals of buying/selling cryptocurrency.
+            td
+              span Sponsored Post
+              br
+              span Social Media
+            td Cryptocurrency
+            td 10,000
+            td $350
+            td
+              a(href='https://blockonomi.com/advertise/') Contact
+          tr
+            td
+              a(href='https://www.bitcoin.com/advertise') Bitcoin.com
+            td Provides news related to bitcoin, as well as a community forum. Large audience (~3M visitors/month). Also has a self-serve advertising option.
+            td
+              span Sponsored Post
+              br
+              span Display
+              br
+              span Podcast
+            td Cryptocurrency
+            td 2,500,000
+            td 
+            td
+              a(href='https://www.bitcoin.com/advertise') Contact
+          tr
+            td
+              a(href='https://bitcoinmagazine.com/') Bitcoin Magazine
+            td Provides news related to bitcoin -- one of the original news and print magazine publishers specializing in Bitcoin and digital currencies. 
+            td
+              span Sponsored Post
+              br
+              span Display
+              br
+              span Newsletter
+            td Cryptocurrency
+            td 1,000,000
+            td 
+            td
+              a(href='mailto:sales@bitcoinmagazine.com') Contact
+          tr
+            td
+              a(href='http://www.newsbtc.com/') News BTC
+            td Provides news related to bitcoin, with strong community ties to all corners of the cryptocurrency space.
+            td
+              span Sponsored Post
+              br
+              span Display
+            td Cryptocurrency
+            td 630,000
+            td 
+            td
+              a(href='mailto:advertise@newsbtc.com') Contact
+          tr
+            td
+              a(href='https://www.coindesk.com/') Coindesk
+            td Provides news, prices, and information on bitcoin, digital currencies, and the blockchain movement as a whole. Likely the largest bitcoin/cryptocurrency news provider. Also provides self-serve advertising option with set CPM.
+            td
+              span Sponsored Post
+              br
+              span Display
+              br
+              span Newsletter
+            td Cryptocurrency
+            td 3,000,000
+            td 
+            td
+              a(href='https://www.coindesk.com/advertising/') Contact
+          tr
+            td
+              a(href='https://iosdevweekly.com/') iOS Dev Weekly
+            td Weekly newsletter covering iOS Development -- engaged, technical audience of programmers. Allows self-serve advertising through the 'contact' link below.
+            td
+              span Newsletter
+            td Technology
+            td 42,000
+            td $1,500
+            td
+              a(href='https://iosdevweekly.com/sponsorship') Contact
+          tr
+            td
+              a(href='https://iosdevweekly.com/') iOS Dev Weekly
+            td Weekly newsletter covering iOS Development -- engaged, technical audience of programmers. Allows self-serve advertising through the 'contact' link below.
+            td
+              span Newsletter
+            td Technology
+            td 42,000
+            td $1,500
+            td
+              a(href='https://iosdevweekly.com/sponsorship') Contact
+          tr
+            td
+              a(href='http://hackingui.com/newsletter-network/') The Hacking Network
+            td Network of newsletters that reach a global community of 1.3M industry-leading design and front-end development professionals.
+            td
+              span Newsletter
+            td Technology
+            td 1,300,000
+            td 
+            td
+              a(href='http://hackingui.com/newsletter-network/') Contact
+          tr
+            td
+              a(href='https://pythontips.com/') Python Tips
+            td Blog and newsletter covering Python development. 
+            td
+              span Newsletter
+              br
+              span Display
+              br
+              span Sponsored Post
+            td Technology
+            td 35,000
+            td 
+            td
+              a(href='mailto:yasoob.khld@gmail.com') Contact
+          tr
+            td
+              a(href='http://javascriptweekly.com/') Javascript Weekly
+            td 
+              | Weekly newsletter aimed at JavaScript developers and web developers with an interest in JavaScript, Angular, React, Node.js, and related technologies. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 65,000
+            td $675
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://rubyweekly.com/') Ruby Weekly
+            td 
+              | Weekly newsletter aimed at Ruby developers. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 20,000
+            td $340
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://frontendfoc.us/') Frontend Focus
+            td 
+              | Weekly newsletter aimed at frontend developers. Covers HTML5, CSS3, browsers and their related technologies, such as WebGL, the Web Audio API, WebSockets and the myriad of APIs that make up the modern web experience. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 33,000
+            td $400
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://frontendfoc.us/') Node Weekly
+            td 
+              | Node.js-focused spin-off to JavaScript Weekly publication. Developers interested in web development, javascript, Node.js. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 15,200
+            td 
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://react.statuscode.com/') React Status
+            td 
+              | Weekly newsletter focused on open-source Javascript library, React. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 9,000
+            td $200
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='http://www.databaseweekly.com/') Database Weekly
+            td 
+              | Weekly newsletter covering wide range of database topics from SQL to NoSQL, relational databases like MySQL, Postgres and SQL Server through to MongoDB, Redis, and experimental databases. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 5,000
+            td $150
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://webopsweekly.com/') WebOps Weekly
+            td 
+              | Weekly newsletter for web developers with a significant interest in the way their pages are deployed and served up to users. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 5,000
+            td $100
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://golangweekly.com/') Golang Weekly
+            td 
+              | Leading email publication for developers using Google’s server-side programming language, Go. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 10,000
+            td $150
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://mobilewebweekly.com/') Mobile Dev Weekly
+            td 
+              | A weekly newsletter for mobile web, hybrid and native app developers. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 4,000
+            td $150
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='https://postgresweekly.com/') Postgres Weekly
+            td 
+              | A weekly newsletter dedicated to the open source PostgreSQL (aka Postgres) relational database management system. Part of 
+              a(href='https://cooperpress.com/mediakit2018q1.pdf') Cooper Press 
+              | newsletter network.
+            td
+              span Newsletter
+            td Technology
+            td 5,500
+            td $150
+            td
+              a(href='https://cooperpress.com/advertising/') Contact
+          tr
+            td
+              a(href='http://importpython.com/') ImportPython
+            td 
+              | A weekly newsletter covering Python tips and tools reaching thousands of developers.
+            td
+              span Newsletter
+            td Technology
+            td 5,000
+            td 
+            td
+              a(href='mailto:cs@importpython.com') Contact
+          tr
+            td
+              a(href='https://artres.xyz') Art Resources and Tutorials
+            td 
+              | Individuals interested in art, media, and technology.  53.6% based in the US, but with global reach with countries like Canada, Germany, and the UK. 60% between 18-24, 25% 25-35 43% female, 57% male.
+            td
+              span Display
+              br
+              span Social Media
+            td Technology
+            td 4,000
+            td $90
+            td
+              a(href='mailto:aky@artres.xyz') Contact
+          tr
+            td
+              a(href='https://botlist.co/advertise') Botlist
+            td 
+              | Site highlighting the top chatbots across variety of platforms (e.g. FB messenger, Alexa, Android, etc). Good place to advertise chatbot or bot-related services. 
+            td
+              span Display
+              br
+              span Newsletter
+            td Technology
+            td 300,000
+            td $2,500
+            td
+              a(href='https://botlist.co/advertise') Contact
+          tr
+            td
+              a(href='https://char.gd/') Charged
+            td 
+              | Weekly podcast, newsletter and blog covering latest technology news/highlights. Audience of tech workers (employees at Google, Facebook, etc) and startup founders.
+            td
+              span Podcast
+              br
+              span Newsletter
+            td Technology
+            td 30,000
+            td 
+            td
+              a(href='mailto:owen@char.gd') Contact
+          tr
+            td
+              a(href='https://www.launchticker.com/partnerships') Launch Ticker
+            td 
+              | Curated top stories in Tech. Need-to-know news in less than 10 minutes a day. Audience of VCs, angel investors, accelerators, startup founders, and tech enthusiasts.
+            td
+              span Newsletter
+            td Technology
+            td 11,000
+            td 
+            td
+              a(href='mailto:partners@launch.co') Contact
+          tr
+            td
+              a(href='https://slashdot.org/') Slashdot
+            td 
+              | Blog and newsletter covering tech news. Large audience of tech workers, VCs, startup founders.
+            td
+              span Newsletter
+            td Technology
+            td 1,000,000
+            td
+              a(href='https://slashdotmedia.com/advertising-and-marketing-services/display-advertising/') Varies
+            td
+              a(href='https://slashdotmedia.com/contact/') Contact
+          tr
+            td
+              a(href='https://dataelixir.com/') Data Elixir
+            td 
+              | Weekly newsletter of curated data science news and resources from around the web.
+            td
+              span Newsletter
+            td Technology
+            td 22,000
+            td
+            td
+              a(href='https://dataelixir.com/sponsorship') Contact
+
+      br
+      br
+
+      //google analytics - find-me
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-105691246-1', 'auto');
+        ga('send', 'pageview');
+
+        //**************************************************************************//
+        //********************************SCRIPTS***********************************//
+        //**************************************************************************//
+
+        
+  else
+    if !user
+      //jquery
+      script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+      //dataTables
+      script(src='https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js') 
+      script(src='https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js')
+      //dataTables responsive
+      script(type='text/javascript', src='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.js') 
+
+      
+      link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.css')      
+      //dataTables css
+      link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css')
+
+      //yadcf
+      //yadcf docs: http://yadcf-showcase.appspot.com/DOM_source_select2.html
+      script(src='https://cdnjs.cloudflare.com/ajax/libs/yadcf/0.9.1/jquery.dataTables.yadcf.js')
+      link(href='https://yadcf-showcase.appspot.com/resources/css/jquery.dataTables.yadcf.css ', rel='stylesheet', type='text/css')
+
+      script.
+
+        /* Custom filtering function which will search data in column four between two values */
+        $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        //var cat = $('#cat').val();
+        //console.log(cat)
+
+        var age = parseFloat( data[3] ) || 0; // use data for the age column
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+        ( isNaN( min ) && age <= max ) ||
+        ( min <= age   && isNaN( max ) ) ||
+        ( min <= age   && age <= max ) )
+        {
+        return true;
+        }
+        return false;
+        }
+        );
+        $(document).ready(function() {
+
+          $('#example').DataTable( {
+            responsive: true,
+            "pageLength": 6,
+            "pagingType": "simple",
+            "paging": true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: 4 },
+                { responsivePriority: 3, targets: 5 },
+            ],
+
+            } );
+
+
+        var table = $('#example').DataTable();
+        // Event listener to the two range filtering inputs to redraw on input
+        $('#min, #max').keyup( function() {
+        table.draw();
+
+        } );
+
+        yadcf.init(table, [
+          {
+          column_number : 2,
+          filter_type: "text",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_default_label: "Content type",
+          filter_container_id: 'content_type_filter'
+
+          },
+          {
+          column_number : 3,
+          filter_type: "select",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_default_label: "Category",
+          filter_container_id: 'category_filter'
+          },
+          {
+          column_number : 4,
+          filter_type: "range_number",
+          filter_container_id: 'audience_size_filter'
+          },
+          {
+          column_number : 5,
+          filter_type: "range_number",
+          column_data_type: "text",
+          html_data_type: "text",
+          filter_container_id: 'pricing_filter'
+          },
+          ]);
+        } );
+      link(href='https://afeld.github.io/emoji-css/emoji.css', rel='stylesheet')
+      .container
+        .col-md-1
+        .col-md-10(style="text-align:center")
+          h2 Promote your business through content creators
+          p.paragraph(style='font-size:25px;line-height:1.7;color:#71828c;')
+            | The Find-me database contains 
+            span direct contact information for content creators 
+            | (blogs, newsletters, podcasts, social media influencers) seeking sponsorship opportunities.
+          br 
+          //img.img-fluid(src='/home_gif2.gif', alt='Find-me', style='max-width:100%;min-width:60%; height:auto;border:#5e6469;border-style: solid !important;border-width: 0px !important;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);')  
+          
+          //p.paragraph(style='font-size:25px;line-height:1.7;color:#71828c;')
+            | Sign up to gain access to 
+            span 107,000,000 
+            | potential customers and growing.
+          //img.img-fluid(src='/find_me_static.png', alt='Find-me', style='max-width:35%;height:auto;border:none;text-align: center;')
+          br
+          
+          #signup_button2.btn.btn-md.btn-hover.btn-default(onclick="location.href='/signup'") Get access
+        .col-md-1
+      br    
+      .container
+        #domains.h4 Preview our database below:
+        table#example.cell-border.hover.responsive(cellspacing='0', width='100%')
+          thead(style="background-color: #17b988;color:#fff")
+            tr
+              th Name
+              th Description
+              th Content type(s)
+              th Category
+              th Impressions (per ad)
+              th Pricing (per ad)
+              th Contact
+          tbody
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Fitness/weight loss enthusiasts. Mostly U.S./Europe-based.
+              td Newsletter
+              td Fitness
+              td 900
+              td $20
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Mostly web and graphic designers, with a few developers thrown in. Mostly U.S. and Europe-based.
+              td Newsletter
+              td Technology
+              td 20,000
+              td $950
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Females based in US and SE Asia, 25-35 years is primary blog audience.
+              td Display
+              td Travel
+              td 10,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog aimed at Tourists and expats in central Vietnam. Interested in travel, food, culture, etc. 
+              td Display
+              td Travel
+              td 6,000
+              td $400
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Interested in cutting-edge technology such as connected cars, driverless cars, new innovations in transportation, etc.
+              td
+                span Newsletter
+                br
+                br  
+                span Display
+              td Technology
+              td 10,000
+              td $400
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Over 70% readers based in the US and UK. 52% Female. 22% 25-34 age group, 25% 35-44 age group. 74% College educated and above. 30% with income above 100,000.
+              td Display
+              td Travel
+              td 5,000
+              td $200
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People interested in free food deals, U.S. and Canada.
+              td Newsletter
+              td Food
+              td 3,000
+              td $50
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People interested in clean technology news. 50% US based readership.
+              td
+                span Newsletter
+                br
+                br  
+                span Display
+                br
+                br  
+                span Sponsored post
+              td Technology
+              td 15,000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Music and comedy fans. U.S. based.
+              td
+                span Sponsored post
+                br
+                br  
+                span Instagram
+                
+              td Music
+              td 80,000
+              td $2,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Baseball fans, and other sports fans, primarily U.S. readers between 20-60 yrs old.
+              td
+                span Sponsored post
+                br
+                br  
+                span Newsletter
+                
+              td Sports
+              td 1,000
+              td $15
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Health, space, science, gadgets, robots, research. Audience 65% U.S., 70% male.
+              td
+                span Sponsored post
+                br
+                br  
+                span Newsletter
+                
+              td Technology
+              td 850,000
+              td $2,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People interested in useful websites, travel, gear, books, tools, electronics.
+              td
+                span Newsletter
+              td Technology
+              td 13,000
+              td $200
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Educated people interested in technology, entrepreneurship, investing, travel, and self development. Ages 20-45. 75% Male, 50% US-based, rest in Western Europe, Australia, Canada.
+              td
+                span Podcast
+                br
+                br  
+                span Videos
+                br
+                br  
+                span Social media post
+                br
+                br  
+                span Display
+              td Technology
+              td 55,000
+              td $5,000
+              td
+                a(href='/signup') Sign up to unlock
+                //br
+                //span(style='font-size:80%') (put 'Ad placement' in subject line)
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People interested in unique travel stories. World-travellers, curious and worldly people of all ages (mainly 16-55).
+              td
+                span Sponsored post
+              td Travel
+              td 2,000
+              td $20
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Geek entertainment news. Primarily U.S. audience.
+              td
+                span Display
+                br
+                br  
+                span Video
+              td Lifestyle
+              td 7,000,000
+              td
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Tech-oriented and computer-savvy individuals interested in content related to space, science, health and technology. 55% male. 80% of audience between 25-49 years old. 85% of audience is U.S. based. 85% of audience have income over $65,000/year.
+              td
+                span Display
+                br
+                br  
+                span Video
+              td Technology
+              td 70,000,000
+              td
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Site that allows users to verify ID cards, passports, driver's licenses, credit cards, utility bills, and more.
+              td
+                span Display
+              td Technology
+              td 2,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Solo and intrepid travelers heading to Asia / Australia. Primarily U.S. based.
+              td
+                span Display
+                br
+                br  
+                span Sponsored post
+              td Travel
+              td 8,000
+              td $120
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Tourists, summer workers and locals living, working and visting the island of Ibiza. Aimed at families, mature couples and those looking for the club side of the island.
+              td
+                span Display
+                br
+                br  
+                span Sponsored post
+              td Travel
+              td 30,000
+              td $80
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td A platform for programmers to share knowledge and experience.
+              td
+                span Display
+                br
+                br  
+                span Sponsored post
+              td Technology
+              td 2000
+              td $50
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Football (soccer) fans. Primarily UK-based (57%).
+              td
+                span Podcast
+                br
+                br  
+                span Sponsored post
+                br
+                br
+                span Display
+              td Sports
+              td 1,000,000
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Food blog - health conscious, mostly female (92%), moms, mostly US based (52%), young (50% between the ages of 18-35). Vegans, gluten free.
+              td
+                span Display
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Social media post
+                br
+                br
+                span Recipe Development
+              td Food
+              td 350,000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Front-End Developers, UX & UI designers. Primarily U.S based (USA 53.5%, United Kingdom 6.8%, Germany 4.7%).
+              td
+                span Newsletter
+              td Technology
+              td 19000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Sports fans (primarily 18-40) (95% traffic in the U.S.)
+              td
+                span Display
+                br
+                br
+                span Social media 
+                br
+                br
+                span Videos
+              td Sports
+              td 100,000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Digital provides news covering music, technology, fashion. Also operate magazine covering same topics. Audience is ~25% male, 31% UK, 17% US. 
+              td
+                span Display
+                br
+                br
+                span Magazine
+                
+                
+              td Music
+              td 4,000,000
+              td
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Photography community. Site provides news and video covering professional photography. 95% of users identify as at least amateur photographers. Audience predominantly aged 18-35.
+              td
+                span Display
+                br
+                br
+                span Sponsored post
+                
+                
+              td Photography
+              td 5,000,000
+              td $2,000
+              td
+                a(href='/signup') Sign up to unlock
+                //more detail here: https://d1w5usc88actyi.cloudfront.net/fstoppers-media-kit-201708.pdf?_ga=2.30478975.1357877243.1506138291-139220452.1506138291
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td As the largest college team-specific site on the internet, Eleven Warriors welcomes millions of Ohio State and college sports fans. 90% male, 67% between the ages of 25–54, 35% earn more than $100,000 per year; 73% earn more than $50,000, 80% have attained a college degree; 28% have a post-graduate degree.
+              td
+                span Display
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Podcast
+                
+                
+              td Sports
+              td 1,500,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Droid Life is an online blog covering Android news, reaching millions of tech enthusiasts each month, the majority of which are in the US.
+              td
+                span Display
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Newsletter
+                
+                
+
+              td Technology
+              td 1,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog for statistics and data visualization, and is frequented by data-savvy readers who are interested in such. 
+              td
+                span Display
+                br
+                br
+                span RSS Feed Sponsorship
+              td Technology
+              td 1,100,000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Covers electronic music producers, musicians, composers, DJs, sound engineers, etc. Best for promoting music software, plugins, sample packs, audio services, instruments, music business and more.
+              td
+                span Display
+              td Music
+              td 220,000
+              td $1,100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Pop culture news website, 56% female 44% male. 43% are between the ages of 25-44 and 28% are between the ages of 45-64. 51% make an income of above $50,000 a year. 58% have a college degree or higher.
+              td
+                span Display
+              td News
+              td 1,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Repository of .psd files. Designers, front-end developers, tech-saavy individuals. Primarily U.S.-based.
+              td
+                span Display
+                br
+                br
+                span Social media 
+              td Design
+              td 250,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td TV show calendar to know when your next episodes are airing, helping track watched progress, and discover new TV shows. 80% aged 18-34. 60% male. 20% US, 60% Europe, 20% rest of world. 
+              td
+                span Display
+                br
+              td Entertainment
+              td 15,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Entrepreneurs who want to use media to grow their business. 
+              td
+                span Sponsored post
+                br
+                br
+                span Social media
+                br
+                br
+                span Videos
+              td Business
+              td 102,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Elementary and middle school students of high income families based in Silicon Valley. Interested in educational products with an emphasis in technology. Partnerships welcome.
+              td
+                span Sponsored post
+                br
+                br
+                span Email newsletter
+                br
+                br
+                span Flyers
+              td Business
+              td 2,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Tech and travel savvy digital nomads, expats and travel enthusiasts, predominantly from the US and Europe.
+              td
+                span Sponsored post
+                br
+                br
+                span Display
+                
+              td Business
+              td 3,000
+              td $250
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Primarily 13-22 age range, US based. Posts about education, history, politics, science, and technology.
+              td
+                span Sponsored post
+                br
+                br
+                span Display
+              td Education
+              td 50,000
+              td $50
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Site focused specifically on early-stage internet startups. Audience of early adopters and startup founders coming to the website for one reason: sign up for new services. Website, newsletter, and Twitter accounts all active.
+              td
+                span Sponsored post
+                br
+                br
+                span Social media
+                br
+                br
+                span Newsletter  
+              td Technology
+              td 100,000
+              td $900
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td  Community of tech lovers — people that ready to use software, apps, services, and more. Audience mainly US, Europe.
+              td
+                span Sponsored post
+                br
+                br
+                span Newsletter  
+                
+                
+              td Technology
+              td 500,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Site dedicated to film-making, with tech-hungry filmmakers, avid film fans, and independent creatives. 
+              td
+                span Sponsored post
+                br
+                br
+                span Newsletter  
+                
+                
+              td Film
+              td 500,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Site dedicated to mixed martial arts coverage. Audience primarily male, US, Europe.
+              td
+                span Sponsored post
+                br
+                br
+                span Newsletter  
+              td Sports
+              td 10,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td One of the most popular resources for synthesizer and electronic music news on the Internet.
+              td
+                span Sponsored post
+                br
+                br
+                span Newsletter  
+                br
+                br
+                span Display
+                br
+                br
+                span Competitions
+              td Music
+              td 330,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td A newsletter for everything important in design and technology. Presenting the most popular articles, inspiration and products in one place.
+              td
+                span Newsletter  
+              td Technology
+              td 40,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Stock trading community. 68% male, Finance/Business related, ~70% have income over $175,000. ~23% have a net worth over $2,000,000.
+              td
+                span Social media
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Podcast
+                br
+                br
+                span Newsletter  
+              td Business
+              td 20,000
+              td $250
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Tech and travel savvy digital nomads, expats and travel enthusiasts, predominantly from the US and Europe.
+              td
+                span Sponsored post
+                br
+                br
+                span Display
+                br
+                br
+                span Social media
+              td Travel
+              td 3,000
+              td $250
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td MBA students, alumni, applications interested in job market.
+              td
+                br
+                span Newsletter
+                br
+              td Career
+              td 11,000
+              td $1000
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Entrepreneurs and startup owners. Primarily U.S. based.
+              td
+                span Sponsored post
+                br
+                br
+                span Newsletter
+                br
+              td Business
+              //technology
+              td 300
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Technology geeks, gadgets, how to, apps, gaming etc.
+              td
+                span
+                | Sponsored post
+                br
+                br  
+                span
+                | Newsletter
+                br
+                
+              td Technology
+              td 1,000
+              td $20
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Advertisers, creatives, people interested in productivity/work output.
+              td
+                br
+                span Newsletter
+                br
+              td Productivity
+              td 1400
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Digital marketers, venture capitalists, startup fans, developers and entrepreneurs to gather information about the latest in growth hacking, innovation, technology and digital entrepreneurship.
+              td
+                span Sponsored post
+                br
+                br
+              td Technology
+              td 2,000
+              td $300
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Millennial women in Tucson, Arizona. 66% of our audience is women. 60% of the women in our audience are under age 45.
+              td
+                span Sponsored post
+                br
+                br
+                span Social media
+                br
+                br
+                span Newsletter
+              td Lifestyle
+              td 54,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Robot tool used to help learn to code. Audience is comprised parents who want to interact with their children while learning about programming and adults interested in robotics who want to learn basic coding.
+              td
+                span Newsletter
+                br
+                br
+                span Social media
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Video  
+              td Technology
+              td 10,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Instagram page with middle-aged men and women in higher income brackets. Wine lovers and foodies alike. Good representation in Europe, France and UK especially.
+              td
+                br
+                span Social media
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Video  
+              td Technology
+              td 7,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Pet minded people. Pet owners. Cat enthusiasts.
+              td
+                br
+                span Social media
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Video  
+              td Pets
+              td 2,000
+              td $250
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Evnironmentally conscious individuals, healthy eaters (Vegan, plant-based diets, etc) 50% UK 30% UK 20% Canada, 10 % Australia. 40k real and responsive social media audience, pretty equal male/female visitors, age range 25 - 60, average household income $100k - $200k.
+              td
+                br
+                span Social media
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Newsletter  
+              td Environment
+              td 3,000
+              td $70
+              td
+                a(href='/signup') Sign up to unlock
+                //br
+                //span(style='font-size:80%') Also have syndicate of other social media admins and groups to total 1 million followers, price dependent on reach.
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Digital nomads and location independent entrepreneurs. UK/US based audience.
+              td
+                br
+                span Display
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Video  
+              td Travel
+              td 20,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Covering views, news, and updates related to open source software, hardware, technology and community.
+              td
+                br
+                span Newsletter
+                br
+                br
+                span Sponsored post
+                br
+                br
+                span Social Media  
+              td Travel
+              td 8,000
+              td $300
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Geeky, tech-minded folks. Primarily U.S-based, male.
+              td
+                br
+                span Newsletter
+                br
+              td Technology
+              td 3,500
+              td $50
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Video game players, primarily 15-25 year old, male.
+              td
+                br
+                span Newsletter
+                br
+              td Gaming
+              td 600
+              td $20
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Email newsletter about APIs. Audience of developers interested in APIs, building applications.
+              td
+                br
+                span Sponsored post
+                br
+              td Technology
+              td 1100
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td First time parents and moms-to-be. Individuals focused on health and travel.
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Parenting
+              td 1000
+              td $3
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Food & Dating Magazine is for foodies and lovers, where you find new food and dating ideas and recreate them on date nights. 80% female, mainly U.S.-based.
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Food
+              td 3,000
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Online publication focused on the latest stories about startups.
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Technology
+              td 3,000
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Wide range of individuals (ages 12-40) as it is a simple tool that anyone can use to create a map. Some categories include teachers, students, salespeople, geography/history enthusiasts, etc. Primarily from the US, UK and Canada (50, 9 and 4% respectively).
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Technology
+              td 6,000
+              td $600
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Lifestyle-focused publication on men interested in fitness, nutrition, etc. Audience is 70% male and 30% female.
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Fitness
+              td 3,000
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Beauty Mantra is a Youtube channel targeted towards Indian women interested in fashion, style, beauty and fitness.
+              td
+                br
+                span Video
+                br
+              td Fitness
+              td 100,000
+              td $200
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Digital magazine for Harry Potter fans. Young adult readers, movie lovers.
+              td
+                br
+                span Digital magazine
+                br
+              td Fitness
+              td 2,000
+              td $50
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog focused on social media and social media marketing. Publishes detailed 'how to' articles and along with reviews of social media tools, etc. 19% self-employed, 59% work for a company with 2 to 99 employees, 12% 100 to 499 employees, 10% 500+ employees. 41% B2B and 59% B2C.
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored post
+                br
+              td Advertising
+              td 500,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog focused on digital marketing, SEO, content marketing, and paid search. Visitors are marketers looking for the best tools, tips, and strategies. Pricing varies depending on ad format, length.
+              td
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+                span Newsletter
+                br
+              td Advertising
+              td 600,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog focused on digital marketing, brand marketing. Visitors are marketers looking for the best tools, tips, and strategies. Pricing varies depending on ad format, length.
+              td
+                br
+                span Display
+                br
+                span Newsletter
+                br
+                span Print
+                br
+              td Advertising
+              td 942,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog covering the Toronto Mapleleafs, a member of the National Hockey League. 96% male, Canada/U.S.-focused, 50% visitors 18-34 years old. Pricing varies depending on ad format, length.
+              td
+                br
+                span Display
+                br
+              td Sports
+              td 1,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog and email newsletter publication covering craft beer. Audience of craft brewers, distributors, and industry professionals. Pricing varies depending on ad format, length.
+              td
+                br
+                span Newsletter
+                br
+                span Display
+                br
+              td Lifestyle
+              td 35,000
+              td $3,000
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Entrepreneurs, designers, agencies looking for the best tools and resources to use for their business.
+              td
+                br
+                span Newsletter
+                br
+              td Business
+              td 700
+              td $69
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Computer and gadget users, programmers, business-driven individuals. Visitors primarily from US, UK, Australia, Germany, India (in that order).
+              td
+                br
+                span Sponsored post
+                br
+                span Display
+                br
+              td Technology
+              td 1,000
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Health-concious individuals interested in health and nutrition news and research. Primarily U.S.-based.
+              td
+                br
+                span Sponsored post
+                br
+                span Display
+                br
+              td Fitness
+              td 1,000
+              td $10
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Freelancers interested in productivity, technology, and marketing. 
+              td
+                span Newsletter
+                br
+              td Business
+              td 1,600
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People interested in technology, productivity, futurism. Geeky, smart audience.
+              td
+                span Newsletter
+                br
+              td Business
+              td 200
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td People who value self-improvement, continuous learning, productivity hacks. Motivated audience of professionals across variety of industries.
+              td
+                span Newsletter
+                br
+              td Business
+              td 5,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Marketers interested in organic, paid, and social media marketing news.
+              td
+                span Newsletter
+                br
+              td Marketing
+              td 120
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Web designers interested in latest design news and tools (including discounts/deals for designer tools). 
+              td
+                span Newsletter
+                br
+              td Design
+              td 120,000
+              td $3,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Website covering Mac, iPhone, and iPad apps. Audience interested in technology, Apple products, productivity.
+              td
+                span Newsletter
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Technology
+              td 17,000
+              td $500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td A website and weekly newsletter covering the open web. Technical audience -- programmers interested in open source.
+              td
+                span Newsletter
+                br
+                span Display
+                br
+                span Sponsored post
+                br
+              td Technology
+              td 100,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Weekly newsletter with curated news and stories from the startup world. 
+              td
+                span Newsletter
+                br
+              td Technology
+              td 3,500
+              td $130
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Newsletter with highly engaged (60%+ open rate) audience of startup founders, VCs, tech workers.
+              td
+                span Newsletter
+                br
+              td Technology
+              td 6,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Directory of web applications. Audience of web app enthusiasts.
+              td
+                span Sponsored post
+                br
+                span Newsletter
+                br
+              td Technology
+              td 1,500
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Online magazine for professional web designers and developers.
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Design
+              td 1,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Web blog and newsletter for professional web designers and developers.
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Design
+              td 40,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td A user experience blog that publishes articles showing how good and bad design practices affect user behavior. 
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Design
+              td 50,000
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td ArtStation is a hub for professional games, film, media and entertainment art, with millions of people using the platform.
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Design
+              td 2,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Audience of engineers, hackers, developers, polyglots, backend, frontend, full-stack, operations, designers, and everything in between. Range of advertising options/pricing here (follow contact link for detail).
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+                br
+                span Podcast
+              td Technology
+              td 100,000
+              td $1,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Database with curated list of equity free funding options for startups. Audience comprised of entrepreneurs and aspiring entrepreneurs interested in startup funding, etc.
+              td
+                br
+                span Newsletter
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Startups
+              td 30,000
+              td $200
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Highly targeted weekly newsletter for software programmers, freelancers, consultants, IT professionals and entrepreneurs that keeps them up to date on the latest news from the niche technology segment. 
+              td
+                br
+                span Newsletter
+              td Technology
+              td 1,600
+              td $35
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Highly targeted weekly newsletter with over 12,000 developers with an active interest in React and related technologies. 
+              td
+                br
+                span Display
+              td Technology
+              td 12,000
+              td $400
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Site covers bitcoin and cryptocurrency news/prices. 
+              td
+                br
+                span Display
+              td Cryptocurrency
+              td 800,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Provides educational guides to blockchain and cryptocurrency. Covers mining, ICOs, fundamentals of buying/selling cryptocurrency.
+              td
+                br
+                span Sponsored Post
+                br
+                span Social Media
+              td Cryptocurrency
+              td 10,000
+              td $350
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Provides news related to bitcoin, as well as a community forum. Large audience (~3M visitors/month). Also has a self-serve advertising option.
+              td
+                br
+                span Sponsored Post
+                br
+                span Display
+                br
+                span Podcast
+              td Cryptocurrency
+              td 2,500,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Provides news related to bitcoin -- one of the original news and print magazine publishers specializing in Bitcoin and digital currencies. 
+              td
+                br
+                span Sponsored Post
+                br
+                span Display
+                br
+                span Newsletter
+              td Cryptocurrency
+              td 1,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Provides news related to bitcoin, with strong community ties to all corners of the cryptocurrency space.
+              td
+                br
+                span Sponsored Post
+                br
+                span Display
+              td Cryptocurrency
+              td 630,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Provides news, prices, and information on bitcoin, digital currencies, and the blockchain movement as a whole. Likely the largest bitcoin/cryptocurrency news provider. Also provides self-serve advertising option with set CPM.
+              td
+                br
+                span Sponsored Post
+                br
+                span Display
+                br
+                span Newsletter
+              td Cryptocurrency
+              td 3,000,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Weekly newsletter covering iOS Development -- engaged, technical audience of programmers. Allows self-serve advertising through the 'contact' link below.
+              td
+                br
+                span Newsletter
+              td Technology
+              td 42,000
+              td $1,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Weekly newsletter covering iOS Development -- engaged, technical audience of programmers. Allows self-serve advertising through the 'contact' link below.
+              td
+                br
+                span Newsletter
+              td Technology
+              td 42,000
+              td $1,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Network of newsletters that reach a global community of 1.3M industry-leading design and front-end development professionals.
+              td
+                br
+                span Newsletter
+              td Technology
+              td 1,300,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td Blog and newsletter covering Python development. 
+              td
+                br
+                span Newsletter
+                br
+                span Display
+                br
+                span Sponsored Post
+              td Technology
+              td 35,000
+              td 
+              td
+                a(href='mailto:yasoob.khld@gmail.com') Contact
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter aimed at JavaScript developers and web developers with an interest in JavaScript, Angular, React, Node.js, and related technologies.
+              td
+                span Newsletter
+              td Technology
+              td 65,000
+              td $675
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter aimed at Ruby developers.
+              td
+                span Newsletter
+              td Technology
+              td 20,000
+              td $340
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter aimed at frontend developers. Covers HTML5, CSS3, browsers and their related technologies, such as WebGL, the Web Audio API, WebSockets and the myriad of APIs that make up the modern web experience.
+              td
+                span Newsletter
+              td Technology
+              td 33,000
+              td $400
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Node.js-focused spin-off to JavaScript Weekly publication. Developers interested in web development, javascript, Node.js.
+              td
+                span Newsletter
+              td Technology
+              td 15,200
+              td $260
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter focused on open-source Javascript library, React.
+              td
+                span Newsletter
+              td Technology
+              td 9,000
+              td $200
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter covering wide range of database topics from SQL to NoSQL, relational databases like MySQL, Postgres and SQL Server through to MongoDB, Redis, and experimental databases.
+              td
+                span Newsletter
+              td Technology
+              td 5,000
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter for web developers with a significant interest in the way their pages are deployed and served up to users.
+              td
+                span Newsletter
+              td Technology
+              td 5,000
+              td $100
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Leading email publication for developers using Google’s server-side programming language, Go.
+              td
+                span Newsletter
+              td Technology
+              td 10,000
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | A weekly newsletter for mobile web, hybrid and native app developers.
+              td
+                span Newsletter
+              td Technology
+              td 4,000
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | A weekly newsletter dedicated to the open source PostgreSQL (aka Postgres) relational database management system.
+              td
+                span Newsletter
+              td Technology
+              td 5,500
+              td $150
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | A weekly newsletter covering Python tips and tools reaching thousands of developers.
+              td
+                span Newsletter
+              td Technology
+              td 5,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Individuals interested in art, media, and technology.  53.6% based in the US, but with global reach with countries like Canada, Germany, and the UK. 60% between 18-24, 25% 25-35 43% female, 57% male.
+              td
+                span Display
+                br
+                span Social Media
+              td Technology
+              td 4,000
+              td $90
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Site highlighting the top chatbots across variety of platforms (e.g. FB messenger, Alexa, Android, etc). Good place to advertise chatbot or bot-related services. 
+              td
+                span Display
+                br
+                span Newsletter
+              td Technology
+              td 300,000
+              td $2,500
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Weekly podcast, newsletter and blog covering latest technology news/highlights. Audience of tech workers (employees at Google, Facebook, etc) and startup founders.
+              td
+                span Podcast
+                br
+                span Newsletter
+              td Technology
+              td 30,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Curated top stories in Tech. Need-to-know news in less than 10 minutes a day. Audience of VCs, angel investors, accelerators, startup founders, and tech enthusiasts.
+              td
+                span Newsletter
+              td Technology
+              td 11,000
+              td 
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                a(href='/signup') Sign up to unlock
+              td 
+                | Blog and newsletter covering tech news. Large audience of tech workers, VCs, startup founders.
+              td
+                span Newsletter
+              td Technology
+              td 1,000,000
+              td
+                a(href='/signup') Sign up to unlock
+              td
+                a(href='/signup') Sign up to unlock
+            tr
+              td
+                  a(href='/signup') Sign up to unlock
+              td 
+                | Weekly newsletter of curated data science news and resources from around the web.
+              td
+                span Newsletter
+              td Technology
+              td 22,000
+              td
+              td
+                  a(href='/signup') Sign up to unlock
+                
+
+      .background_image(style='background-image: url(/illustration_buffl_erik_12_17.png);height:32%;background-repeat: no-repeat;background-position:bottom;background-size:100%')
+      .div
+        .container
+          .row
+            br
+            .col-md-1
+            .col-md-10(style='text-align:center')
+              h2 How it works
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;')
+                | Find-me contains 
+                span direct contact information, 
+                | 
+                span estimated impressions, 
+                | and 
+                span pricing 
+                | for content creators actively seeking advertisers and sponsorship opportunities.
+                br
+                br
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;')
+                | Our database will save you time searching for content creators to sponsor. We do the leg work so you can simply filter, contact, and advertise.
+                br
+                br
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;')
+                | For 
+                span $9/month 
+                | you'll gain access to our continuously updated site, connecting you to 
+                span 125 million
+                |  potential impressions and growing.
+              br
+              //#signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/signup'") Get access
+            .col-md-2    
+
+        //(style="border-top: 2px solid #21ce99;")  
+        //.div(style="background-color:#555a69")
+      hr  
+      .div
+        .container(style='text-align:center')
+          h2 Get access to the Find-me database
+          .row
+            .col-md-1
+            .col-md-5(style='text-align:center') 
+              br
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#333;text-align:center;font-weight:bold') Key information saves you time
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;text-align:left;padding-left:60px')
+                span ✔ 
+                | Direct contact information
+                br
+                span ✔ 
+                | Audience size
+                br
+                span ✔ 
+                | Category
+                br
+                span ✔ 
+                |Pricing
+            .col-md-5(style='text-align:center')
+              br
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#333;text-align:center;font-weight:bold') 
+               | Simple, risk free pricing 
+               i.em.em-money_with_wings
+               i.em.em-moneybag
+   
+              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;text-align:left;padding-left:60px')
+                span ✔ 
+                | $9/month
+                br
+                span ✔ 
+                | 10-day money back guarantee
+                br
+                span ✔   
+                | Free to cancel any time
+                br
+                span ✔   
+                | New creators added monthly
+          br      
+          #signup_button2.btn.btn-md.btn-hover.btn-default(onclick="location.href='/signup'") Sign up
+        br
+        br 
+        hr
+        br
+        br  
+            
+        #blurb.container(style="width:80%;text-align:center")
+          //.col-md-2
+          //.col-md-8
+          h2 Want to sample our database? 
+          .col-md-2
+          .col-md-8
+            p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') Join our email list receive information about one content creator from our paid database each week, for free! 
+            // Begin MailChimp Signup Form
+            link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
+            style(type='text/css').
+              #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+              /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+              We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+            #mc_embed_signup
+              form#mc-embedded-subscribe-form.validate(action='//datadriventhoughts.us13.list-manage.com/subscribe/post?u=262c11ce96e8bc9ddb6d07ea8&id=968245194c', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='')
+                #mc_embed_signup_scroll
+                  //label(for='mce-EMAIL', style='display:block') Subscribe to our mailing list
+                  input#mce-EMAIL.email(type='email', value='', name='EMAIL', placeholder='email address -- we never spam', required='')
+                  // real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                  div(style='position: absolute; left: -5000px;', aria-hidden='true')
+                    input(type='text', name='b_262c11ce96e8bc9ddb6d07ea8_968245194c', tabindex='-1', value='')
+                .clear
+                  input#mc-embedded-subscribe.button(type='submit', value='Subscribe', name='subscribe')
+
+          // End mc_embed_signup  
+      //.background_image(style='background-image: url(/800_600_background.png);height:100%;background-repeat: no-repeat;padding-top:-100px;background-size:100%')  
+      //p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;')
+        br
+        span Creators
+        br
+        | Want to be added to our site?
+        br
+        | Submit your info
+      //#signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/records'") Get started
+
+
+
+      script.
+        function signup() {
+        document.getElementById("signup-form").submit();
+        }
+        window.onload = function start(){
+        //allow submitting with enter key - Signup Form
+        $('#signup-form').keydown(function(e) {
+        var key = e.which;
+        if (key == 13) {
+        // As ASCII code for ENTER key is "13"
+        document.getElementById("signup-form").submit();
+        }
+        });
+        }

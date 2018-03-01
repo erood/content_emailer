@@ -1,0 +1,148 @@
+    if !user
+      script(src='/js/lib/bootstrap.min.js')
+      script(src='/js/main.js') 
+      link(href='https://afeld.github.io/emoji-css/emoji.css', rel='stylesheet')
+      .div
+        #landing.container
+          .row
+            .col-md-5
+              #find_landing.h3.subheading
+                | Connecting advertisers with creators
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;')
+                br
+                span Advertisers:
+                |  Sponsor content being viewed by the people you're trying to reach. We manage a growing list of influential content creators (blogs, email newsletters, podcasts,etc) actively looking for advertisers and sponsorships.
+                br
+                br
+                span Creators:
+                |  Submit information about your content, and businesses will reach out to you directly with sponsorship offers.
+                br
+                br
+              img.img-fluid(src='/find_me_static.png', alt='Mescale', style='max-width:35%;height:auto;border:none;text-align: center;')
+            .col-md-1
+            .col-md-6
+              br
+              br
+              img.img-fluid(src='/home_gif.gif', alt='Mescale', style='max-width:100%; height:auto;border:#5e6469;border-style: solid !important;border-width: 0px !important;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);')
+
+      .background_image(style='background-image: url(/illustration_erik.png);height:32%;background-repeat: no-repeat;background-position:bottom;background-size:100%')
+      .div
+        .container
+          .row
+            br
+            .col-md-2
+            .col-md-8(style='text-align:center')
+              h3 How it works:
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;')
+                | Our database contains statistics and 
+                span direct contact information 
+                | for content creators actively looking for advertisers and sponsorship opportunities.
+                br
+                br
+                | For 
+                span $9/month 
+                | you'll gain access to our continuously updated site, connecting you to 
+                span 107,000,000
+                |  potential impressions and growing.
+              br
+              #signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/signup'") Get started
+            .col-md-2    
+        br
+        br
+        br  
+        //(style="border-top: 2px solid #21ce99;")  
+        //.div(style="background-color:#555a69")
+        #blurb.container(style="width:80%;text-align:center")
+          //.col-md-2
+          //.col-md-8
+          h3 Want to sample our database? 
+          .col-md-2
+          .col-md-8
+            p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;') Join our email list receive information about one content creator from our paid database each week, for free! 
+            // Begin MailChimp Signup Form
+            link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
+            style(type='text/css').
+              #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+              /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+              We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+            #mc_embed_signup
+              form#mc-embedded-subscribe-form.validate(action='//datadriventhoughts.us13.list-manage.com/subscribe/post?u=262c11ce96e8bc9ddb6d07ea8&id=968245194c', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='')
+                #mc_embed_signup_scroll
+                  //label(for='mce-EMAIL', style='display:block') Subscribe to our mailing list
+                  input#mce-EMAIL.email(type='email', value='', name='EMAIL', placeholder='email address -- we never spam', required='')
+                  // real people should not fill this in and expect good things - do not remove this or risk form bot signups
+                  div(style='position: absolute; left: -5000px;', aria-hidden='true')
+                    input(type='text', name='b_262c11ce96e8bc9ddb6d07ea8_968245194c', tabindex='-1', value='')
+                .clear
+                  input#mc-embedded-subscribe.button(type='submit', value='Subscribe', name='subscribe')
+
+          // End mc_embed_signup  
+      .div
+        br
+        br  
+        .container(style='text-align:center')
+          h3 Sign up, reach your audience
+          .row
+            .col-md-1
+            .col-md-5(style='text-align:center') 
+              br
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#333;text-align:center;font-weight:bold') Key information saves you time
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;text-align:left;padding-left:60px')
+                span ✔ 
+                | Direct contact information
+                br
+                span ✔ 
+                | Audience size
+                br
+                span ✔ 
+                | Category
+                br
+                span ✔ 
+                |Pricing
+            .col-md-5(style='text-align:center')
+              br
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#333;text-align:center;font-weight:bold') 
+               | Simple, risk free pricing 
+               i.em.em-money_with_wings
+               i.em.em-moneybag
+   
+              p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;text-align:left;padding-left:60px')
+                span ✔ 
+                | $9/month
+                br
+                span ✔ 
+                | 10-day money back guarantee
+                br
+                span ✔   
+                | Free to cancel any time
+                br
+                span ✔   
+                | New creators added monthly
+          br      
+          #signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/signup'") Get started
+      //.background_image(style='background-image: url(/800_600_background.png);height:100%;background-repeat: no-repeat;padding-top:-100px;background-size:100%')  
+      //p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;')
+        br
+        span Creators
+        br
+        | Want to be added to our site?
+        br
+        | Submit your info
+      //#signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/records'") Get started
+
+
+
+      script.
+        function signup() {
+        document.getElementById("signup-form").submit();
+        }
+        window.onload = function start(){
+        //allow submitting with enter key - Signup Form
+        $('#signup-form').keydown(function(e) {
+        var key = e.which;
+        if (key == 13) {
+        // As ASCII code for ENTER key is "13"
+        document.getElementById("signup-form").submit();
+        }
+        });
+        }

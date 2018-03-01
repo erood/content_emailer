@@ -1,0 +1,148 @@
+extends layout
+
+block content
+  
+  
+    
+  .container
+    br
+    h4 View/delete prior weight entries
+    .container
+      ul
+        input(type='hidden', id="goals_json", value= JSON.stringify(locals))
+            
+      //Twilio Testing
+      //form(id="text_form", name="text_form").form-horizontal(action='/postTwilio', method='POST')
+        br
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+          label.col-sm-3.control-label(for='location') Enter phone #:
+          .col-sm-7
+            input.form-control(type='text' name='goal_start', id='goal_start')
+        .form-group
+          .col-sm-offset-3.col-sm-4
+            #submit.btn.btn-md.btn-hover.btn-default(onclick='send_text()') Text Phone (test)
+  //jquery
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+  //functions
+  script.
+    var CSRF_HEADER = 'x-csrf-token';
+
+    var setCSRFToken = function (securityToken) {
+      jQuery.ajaxPrefilter(function (options, _, xhr) {
+        if (!xhr.crossDomain) {
+          xhr.setRequestHeader(CSRF_HEADER, securityToken);
+        }
+      });
+    };
+    
+    
+    //console.log(db.weight.find().sort({"date":-1}));
+    function get_pretty_date(value){
+      var start_date = new Date(value)
+      //start_date.setDate(start_date.getDate()+1);
+      var s_year = start_date.getFullYear();
+      var s_month = start_date.getMonth()+1;
+      if(s_month <= 9)
+          s_month = '0'+s_month;
+      var s_day= start_date.getDate()+1;
+      if(s_day <= 9)
+          s_day = '0'+s_day;
+      var s_prettyDate = s_year +'-'+s_month +'-'+ s_day
+      return s_prettyDate
+
+    };
+    
+  //************************************************************//    
+  //************************Begin pug**************************//
+  //***********************************************************//
+    
+  //just remove this and bump indent out 2 levels to stretch whole screen  
+  h4 Enter Newsletter information
+  br
+  br
+  form.form-horizontal(id="records_form", action='/postGoals', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='name') Name
+      .col-sm-7
+        input.form-control(type='text', step="any", min="0", name='name', id='name')
+    .form-group
+      label.col-sm-3.control-label(for='website') Website:
+      .col-sm-7
+        input.form-control(type='text', name='website', id='website') 
+    .form-group
+      label.col-sm-3.control-label(for='description') Description:
+      .col-sm-7
+        input.form-control(type='number', name='description', id='description') 
+    .form-group
+      label.col-sm-3.control-label(for='audience') Audience Size:
+      .col-sm-7
+        input.form-control(type='text', name='audience', id='audience') 
+    .form-group
+      label.col-sm-3.control-label(for='ctr') CTR:
+      .col-sm-7
+        input.form-control(type='text', name='ctr', id='ctr')
+    .form-group
+      label.col-sm-3.control-label(for='pricing') Pricing:
+      .col-sm-7
+        input.form-control(type='text', name='pricing', id='pricing')    
+    .form-group
+      label.col-sm-3.control-label(for='contact_method') Contact method:
+      .col-sm-7
+        input.form-control(type='text', name='contact_method', id='contact_method')     
+    .form-group
+      label.col-sm-3.control-label(for='email') Email:
+      .col-sm-7
+        input.form-control(type='text', name='email', id='email')       
+
+  .form-group
+    .col-sm-offset-3.col-sm-4
+      #submit.btn.btn-md.btn-hover.btn-default(onclick='enter_weight()') Submit
+        
+        //************************************************************//    
+        //************************Scripts****************************//
+        //***********************************************************//
+        script(type='text/javascript').
+          var goals_json = document.getElementById("goals_json").value;
+          var goals_json_value1 = JSON.parse(goals_json);
+          console.log(goals_json_value1)
+          //$(document).ready(function () {
+          $.parseJSON(goals_json,
+          function (json) {
+          var tr;
+          for (var i = 0; i < goals_json.length; i++) {
+            tr = $('<tr>');
+            var x_date_stg = get_pretty_date(goals_json_value1.weight[i].date);
+            tr.append("<td>" + goals_json_value1.weight[i].weight+"</td>");
+            tr.append("<td>" + x_date_stg+"</td>");
+            tr.append("<td>"+"<btn class=\"btn-md btn-hover btn-default\" onclick=\"deleteRow2(this)\">Delete</button>"+"</td>");
+            $('table').append(tr);
+          }
+          });
+        script(type='text/javascript').
+          function deleteRow2(obj) {
+            var index = obj.parentNode.parentNode.rowIndex;
+            var table = document.getElementById("myTableData2");
+            var currentTD = obj.parentNode.parentNode.rowIndex;
+            var row_length = document.getElementById("myTableData2").rows[currentTD].cells.length;
+            var date_stg = document.getElementById("myTableData2").rows[currentTD].cells[1].innerHTML;
+            var date_iso_stg = new Date(date_stg);
+            var date_iso = date_iso_stg.toISOString();
+            console.log(date_iso)
+            var weight_data = {
+              'weight': document.getElementById("myTableData2").rows[currentTD].cells[0].innerHTML,
+              'date': date_iso
+             }
+            setCSRFToken($('meta[name="csrf-token"]').attr('content'));
+            $.ajax({
+                type: 'POST',
+                data: weight_data,
+                url: '/logbooks/deleteweight',
+                dataType: 'JSON'
+            });
+
+            table.deleteRow(index);
+          }
+          
+      

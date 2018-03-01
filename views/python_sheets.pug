@@ -1,0 +1,203 @@
+//being manual extend layout
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='theme-color' content='#4DA5F4')
+    meta(name='csrf-token', content=_csrf)
+    title #{title} - Find-me
+    link(rel='shortcut icon', href='/favicon.png')
+    link(rel='stylesheet', href='/css/main.css')
+
+  body
+    include partials/header
+
+
+    .container
+      include partials/flash
+      block content
+
+    include partials/footer
+
+    
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');
+
+
+//end manual extend layout paste (interferes with background image, account jquery dropdown)
+block content
+  script.
+    window.onload = function start(){
+
+    }
+  .container(style='text-align:center')
+      h3 Reading and writing to Google Spreadsheets using Python
+      hr
+  .col-md-10.col-md-offset-1
+    // Load mathjax
+    script(src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML')
+    // MathJax configuration
+    script(type='text/x-mathjax-config').
+      MathJax.Hub.Config({
+      tex2jax: {
+      inlineMath: [ ['$','$'], ["\\\(","\\)"] ],
+      displayMath: [ ['$$','$$'], ["\\\[","\\]"] ],
+      processEscapes: true,
+      processEnvironments: true
+      },
+      // Center justify equations in code and markdown cells. Elsewhere
+      // we use CSS to left justify single line equations in code cells.
+      displayAlign: 'center',
+      "HTML-CSS": {
+      styles: {'.MathJax_Display': {"margin": 0}},
+      linebreaks: { automatic: true }
+      }
+      });
+    // End of mathjax configuration
+    <link rel="stylesheet" href="/css/notebooks.css">
+    <body>
+      <div tabindex="-1" id="notebook" class="border-box-sizing">
+        <div class="container" id="notebook-container">
+      <p>
+        <b>(1) Google Drive API, credentials </b>
+      </p>
+       <p>In order to follow along, you're going to need a spreadsheet. Head over to <a href="https://docs.google.com/spreadsheets/u/0/">Google Sheets</a> create one. Put a few dummy columns in there so you can programatically access it later.</p>
+        <p>Next, you'll need to create a service account and OAuth2 credentials from the <a href="https://console.developers.google.com/">Google API Console</a>. Follow the steps below to enable the API and grab your credentials.
+      </p>
+
+      <ol>
+        <li> Head over to the <a href="https://console.developers.google.com/">Google API Console</a>.</li>
+        <li>Create a new project by selecting My Project -> + button</li>
+        <li>Search for 'Google Drive API', enable it.</li>
+        <li> Head over to 'Credentials' (sidebar), click 'Create Credentials' -> 'Service Account Key'</li>
+        <br>
+        <img style= max-width:80%; height= auto; src="/create_credentials.png" alt="Create credentials">
+        <br>
+        <li> Select Compute Engine service default, JSON, hit create.</li>
+        <li> Open up the JSON file, share your spreadsheet with the "XXX-compute@developer.gserviceaccount.com" email listed.</li>
+        <li> Save the JSON file wherever you're hosting your project, you'll need to load it in through Python later.</li>
+      </ol>
+        <br>
+          <p>
+            <b>(2) Connecting Python to Google Sheets, writing a dataframe</b>
+          </p>
+
+          <p> First, you'll need to install <a href="https://github.com/nithinmurali/pygsheets">pygsheets</a>, which allows us to actually read/write to the sheet through Python. Once that's installed, you're all set. Here's an example of importing the credentials and writing some dummy data to the sheet using a Pandas dataframe:
+          </p>
+
+    <!--begin python dump-->
+    <link rel="stylesheet" href="http://erikrood.com/Python_References/notebooks.css">
+
+        <!-- End of mathjax configuration --></head>
+    <body>
+      <div tabindex="-1" id="notebook" class="border-box-sizing">
+
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pygsheets</span>
+    <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="c1">#authorization</span>
+    <span class="n">gc</span> <span class="o">=</span> <span class="n">pygsheets</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="n">service_file</span><span class="o">=</span><span class="s1">&#39;/Users/erikrood/desktop/QS_Model/creds.json&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Create empty dataframe</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+    <span class="c1"># Create a column</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;John&#39;</span><span class="p">,</span> <span class="s1">&#39;Steve&#39;</span><span class="p">,</span> <span class="s1">&#39;Sarah&#39;</span><span class="p">]</span>
+
+    <span class="c1">#open the google spreadsheet (where &#39;PY to Gsheet Test&#39; is the name of my sheet)</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">gc</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;PY to Gsheet Test&#39;</span><span class="p">)</span>
+
+    <span class="c1">#select the first sheet </span>
+    <span class="n">wks</span> <span class="o">=</span> <span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1">#update the first sheet with df, starting at cell B2. </span>
+    <span class="n">wks</span><span class="o">.</span><span class="n">set_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">,(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    </pre></div>
+
+    </div>
+    </div>
+    </div>
+
+
+
+    </div>
+
+    </div>
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+    <div class="inner_cell">
+        <div class="input_area">
+    <br>
+    <p>
+      <b>(3) Done - Check your sheet for the data we pushed in the above step</b>
+    </p>
+
+    <p>Voila! The spreadsheet you created should now be populated with your dataframe:</p>
+    <br>
+    <div style="text-align:center">
+    <img style= max-width:80%; height= auto; src="/py_gsheet_output.png" alt="py_gsheet_output"></a>
+
+    <br>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    </div>
+        </div>
+    </body>
+
+
+    
+    <br>
+    // Begin MailChimp Signup Form (Blog)
+    link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
+    style(type='text/css').
+      #mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; width:100%;}
+      /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+      We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+    #mc_embed_signup
+      form#mc-embedded-subscribe-form.validate(action='https://find-me.us13.list-manage.com/subscribe/post?u=262c11ce96e8bc9ddb6d07ea8&id=94ce60e5da', method='post', name='mc-embedded-subscribe-form', target='_blank', novalidate='')
+        #mc_embed_signup_scroll
+          label(for='mce-EMAIL') Join our email list to be notified when we post about once/month
+          <br>
+          #mc_embed_signup_scroll
+            //label(for='mce-EMAIL', style='display:block') Subscribe to our mailing list
+            input#mce-EMAIL.email(type='email', value='', name='EMAIL', placeholder='email address -- we never spam', required='')
+            // real people should not fill this in and expect good things - do not remove this or risk form bot signups
+            div(style='position: absolute; left: -5000px;', aria-hidden='true')
+              input(type='text', name='b_262c11ce96e8bc9ddb6d07ea8_968245194c', tabindex='-1', value='')
+          .clear
+            input#mc-embedded-subscribe.button(type='submit', value='Subscribe', name='subscribe')
+      // End MailChimp Signup Form
+</div>
+
+<!--End mc_embed_signup-->
+
+    </div>
+    </div>
+
+    </div>
+    <div class="cell border-box-sizing code_cell rendered">
+    <div class="input">
+
+    </div>
+
+
+// Global Site Tag (gtag.js) - Google Analytics - find-me
+script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+script.
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+  gtag('config', 'UA-105691246-1');          

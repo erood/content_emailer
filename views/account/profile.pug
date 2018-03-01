@@ -1,0 +1,91 @@
+extends ../layout
+
+block content
+  //.page-header
+    h4 Profile Information
+
+  //form.form-horizontal(action='/account/profile', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='email') Email
+      .col-sm-7
+        input.form-control(type='email', name='email', id='email', value=user.email)
+    .form-group
+      label.col-sm-3.control-label(for='name') Name
+      .col-sm-7
+        input.form-control(type='text', name='name', id='name', value=user.profile.name)
+    //.form-group
+      label.col-sm-3.control-label Gender
+      .col-sm-6
+        label.radio.col-sm-3
+          input(type='radio', checked=user.profile.gender=='male', name='gender', value='male', data-toggle='radio')
+          span Male
+        label.radio.col-sm-3
+          input(type='radio', checked=user.profile.gender=='female', name='gender', value='female', data-toggle='radio')
+          span Female
+        label.radio.col-sm-3
+          input(type='radio', checked=user.profile.gender=='other', name='gender', value='other', data-toggle='radio')
+          span Other
+    .form-group
+      .col-sm-offset-3.col-sm-4
+        button.btn.btn.btn-primary(type='submit')
+          i.fa.fa-pencil
+          | Update Profile
+
+  //.page-header
+    h4 Change Password
+
+  //form.form-horizontal(action='/account/password', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='password') New Password
+      .col-sm-7
+        input.form-control(type='password', name='password', id='password')
+    .form-group
+      label.col-sm-3.control-label(for='confirmPassword') Confirm Password
+      .col-sm-7
+        input.form-control(type='password', name='confirmPassword', id='confirmPassword')
+    .form-group
+      .col-sm-offset-3.col-sm-4
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-lock
+          | Change Password
+
+  .container
+    br
+    br
+    .col-md-2
+    .col-md-8(style="text-align:center")
+      h3 Cancel Account
+    br
+    form.form-horizontal(action='/account/delete', method='POST')
+      .form-group
+        .col-md-12(style='text-align:center')
+          p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;') If you want to cancel your subscription and delete your account, you can do so here. 
+          p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;') Please keep in mind that this action will take effect immediately, and is irreversible.
+          br
+          input(type='hidden', name='_csrf', value=_csrf)
+          button.btn.btn-danger(type='submit')
+            i.fa.fa-trash
+            | Cancel Subscription, Delete Account
+    br
+    hr
+    br        
+    .col-md-2
+    .col-md-8(style="text-align:center")
+      h3 10-day Money-Back Guarantee
+      br
+      p.paragraph(style='font-size:20px;line-height:1.5;color:#71828c;') If you are unsatisfied with Find-me in any way and have made a payment in the past 10 days, please reach out to me below and I will refund you.
+      |
+      a(style='font-size:110%;')(href='mailto:hi@find-me.co') hi@find-me.co
+      |
+      br
+      br
+
+    // Global Site Tag (gtag.js) - Google Analytics
+    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
+    script.
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments)};
+      gtag('js', new Date());
+      gtag('config', 'UA-105691246-1');

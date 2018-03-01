@@ -1,0 +1,106 @@
+extends layout
+
+block content
+
+  .container
+  br
+  #blurb.container(style='width:80%;text-align:center;padding-top:8px;padding-bottom:10px;')
+      h4 Tell us about your content
+      .p Fill out the details below, and we'll introduce potential sponsors directly to you. We'll review your information, and send you an email when it's up on our site.
+
+  //jquery
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+  //functions
+  script.
+    var CSRF_HEADER = 'x-csrf-token';
+
+    var setCSRFToken = function (securityToken) {
+      jQuery.ajaxPrefilter(function (options, _, xhr) {
+        if (!xhr.crossDomain) {
+          xhr.setRequestHeader(CSRF_HEADER, securityToken);
+        }
+      });
+    };
+
+
+  //************************************************************//
+  //************************Begin pug**************************//
+  //***********************************************************//
+
+  .col-lg-10.col-lg-offset-1
+    br
+    br
+
+    form.form-horizontal(id="records_form", action='/postRecords', method='POST')
+      input(type='hidden', name='_csrf', value=_csrf)
+      .form-group
+        label.col-sm-3.control-label(for='website') Website
+        .col-sm-7
+          input.form-control(type='text', step="any", min="0", name='website', id='website', placeholder='www.mescale.co')
+      .form-group
+        label.col-sm-3.control-label(for='description') Briefy decsribe your audience
+        .col-sm-7
+          textarea.form-control(name='description',id='description', style='width:100%;height:110px;', placeholder='Health-conscious individuals. Primarily U.S. based. (the more stats here the better -- e.g. 80% U.S., 60% male, etc)')
+      .form-group
+        label.col-sm-3.control-label(for='content_type') Content type
+        .col-sm-7
+          textarea.form-control(name='content_type',id='content_type', style='width:100%;height:110px;', placeholder='e.g blog post, email newsletter, etc')
+      .form-group
+        label.col-sm-3.control-label(for='audience') Estimated number of ad impressions
+        .col-sm-7
+          input.form-control(type='percent', step="any", min="0", name='audience', id='audience',placeholder='e.g. 2000')
+      //.form-group
+        label.col-sm-3.control-label(for='open_rate') Open rate (%)
+        .col-sm-7
+          input.form-control(type='number', step="any", min="0", name='open_rate', id='open_rate',placeholder='e.g, 21')
+      //.form-group
+        label.col-sm-3.control-label(for='ctr') Click through rate (CTR)(%)
+        .col-sm-7
+          input.form-control(type='number', step="any", min="0", name='ctr', id='ctr',placeholder='e.g., 4.5')
+      .form-group
+        label.col-sm-3.control-label(for='pricing') Cost of one ad placement ($)
+        .col-sm-7
+          input.form-control(type='currency', step="any", min="0", name='pricing', id='pricing', placeholder='e.g. 100',)
+      .form-group
+        label.col-sm-3.control-label(for='contact_method') Preferred advertiser contact method
+        .col-sm-7
+          textarea.form-control(name='contact_method',id='contact_method', placeholder='e.g. advertisers can contact me via twitter: @rood_erik', style='width:100%;height:70px;')
+      .form-group
+        label.col-sm-3.control-label(for='email') Your email
+        .col-sm-7
+          input.form-control(type='text', step="any", min="0", name='email', id='email', placeholder='cool_email@gmail.com')
+      #signup.form-group
+        .col-sm-offset-3.col-sm-7
+          br
+          #signup_button.btn.btn-md.btn-hover.btn-default(onclick='enter_record()') Submit
+
+
+        //************************************************************//
+        //************************Scripts****************************//
+        //***********************************************************//
+        script(type='text/javascript').
+          function enter_record() {
+          document.getElementById("records_form").submit();
+          }
+
+          /*
+          window.onload = function start(){
+
+          //allow submitting with enter key - Signup Form
+          $('#records_form').keydown(function(e) {
+          var key = e.which;
+          if (key == 13) {
+          // As ASCII code for ENTER key is "13"
+          document.getElementById("records_form").submit();
+          }
+          });
+
+          }*/
+        //google analytics
+        script.
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+          ga('create', 'UA-105691246-1', 'auto');
+          ga('send', 'pageview');
