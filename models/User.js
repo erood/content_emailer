@@ -5,10 +5,10 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
+  subreddits: String,
+  frequency: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
-  user_type: String,
-  customer_id: String,
 
   profile: {
     name: String,
