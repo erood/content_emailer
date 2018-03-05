@@ -1,37 +1,5 @@
-//being manual extend layout
-html
-  head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    meta(name='theme-color' content='#4DA5F4')
-    meta(name='csrf-token', content=_csrf)
-    title Find-me
-    link(rel='shortcut icon', href='/favicon.png')
-    link(rel='stylesheet', href='/css/main.css')
+extends layout
 
-  body
-    include partials/header
-
-
-    .container
-      include partials/flash
-      block content
-
-    include partials/footer
-
-    
-
-    // Global Site Tag (gtag.js) - Google Analytics
-    script(async='', src='https://www.googletagmanager.com/gtag/js?id=UA-105691246-1')
-    script.
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments)};
-      gtag('js', new Date());
-      gtag('config', 'UA-105691246-1');
-
-
-//end manual extend layout paste (interferes with background image, account jquery dropdown)
 
 block content
   //if not signed up, show landing page
@@ -39,7 +7,9 @@ block content
   if user
     head
       //jquery
-      script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+      script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+      //moment
+      script(src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js')
 
       
       link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.css')      
@@ -86,64 +56,71 @@ block content
       .div
         .container
           .row
-            br
             .col-md-10-col-md-offset-1(style='text-align:center')
-              h3 Join
-              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
-                | Select your favorite subreddits  
-              <select multiple="multiple" class="js-example-basic-single" name="state" id="tags" style="width:265px;font-size:16px;" >
-                <option value='MMM'>3M Company</option>
-                <option value='ABT'>Abbott Laboratories</option>
-                <option value='ABBV'>AbbVie Inc.</option>
-                <option value='ACN'>Accenture plc</option>
-                <option value='ATVI'>Activision Blizzard</option>
-                <option value='AYI'>Acuity Brands Inc</option>
-                <option value='ADBE'>Adobe Systems Inc</option>
-                <option value='AMD'>Advanced Micro Devices Inc</option>
-                <option value='AAP'>Advance Auto Parts</option>
-                <option value='AES'>AES Corp</option>
-                <option value='AET'>Aetna Inc</option>
-                <option value='AMG'>Affiliated Managers Group Inc</option>
-                <option value='AFL'>AFLAC Inc</option>
-                <option value='A'>Agilent Technologies Inc</option>
-                <option value='APD'>Air Products & Chemicals Inc</option>
-                <option value='AKAM'>Akamai Technologies Inc</option>
-                <option value='ALK'>Alaska Air Group Inc</option>
-                <option value='ALB'>Albemarle Corp</option>
-                <option value='ARE'>Alexandria Real Estate Equities Inc</option>
-                <option value='ALXN'>Alexion Pharmaceuticals</option>
-                <option value='ALGN'>Align Technology</option>
-                <option value='ALLE'>Allegion</option>
-                <option value='AGN'>Allergan, Plc</option>
-                <option value='ADS'>Alliance Data Systems</option>
-                <option value='LNT'>Alliant Energy Corp</option>
-                <option value='ALL'>Allstate Corp</option>
-                <option value='GOOGL'>Alphabet Inc Class A</option>
-                <option value='GOOG'>Alphabet Inc Class C</option>
-                <option value='MO'>Altria Group Inc</option>
-                <option value='AMZN'>Amazon.com Inc</option>
-                <option value='AEE'>Ameren Corp</option>
-                <option value='AAL'>American Airlines Group</option>
-              </select>
+              h3(style="padding-top:10px;") Sign-up
+              form.form-horizontal(id='signup-form', action='/signup', method='POST')
+                input(type='hidden', name='_csrf', value=_csrf)
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
+                  | Select your favorite subreddits  
+                <select multiple="multiple" class="js-example-basic-single" name="state" id="subreddits" style="width:265px;font-size:16px;" >
+                  <option value='MMM'>3M Company</option>
+                  <option value='ABT'>Abbott Laboratories</option>
+                  <option value='ABBV'>AbbVie Inc.</option>
+                  <option value='ACN'>Accenture plc</option>
+                  <option value='ATVI'>Activision Blizzard</option>
+                  <option value='AYI'>Acuity Brands Inc</option>
+                  <option value='ADBE'>Adobe Systems Inc</option>
+                  <option value='AMD'>Advanced Micro Devices Inc</option>
+                  <option value='AAP'>Advance Auto Parts</option>
+                  <option value='AES'>AES Corp</option>
+                  <option value='AET'>Aetna Inc</option>
+                  <option value='AMG'>Affiliated Managers Group Inc</option>
+                  <option value='AFL'>AFLAC Inc</option>
+                  <option value='A'>Agilent Technologies Inc</option>
+                  <option value='APD'>Air Products & Chemicals Inc</option>
+                  <option value='AKAM'>Akamai Technologies Inc</option>
+                  <option value='ALK'>Alaska Air Group Inc</option>
+                  <option value='ALB'>Albemarle Corp</option>
+                  <option value='ARE'>Alexandria Real Estate Equities Inc</option>
+                  <option value='ALXN'>Alexion Pharmaceuticals</option>
+                  <option value='ALGN'>Align Technology</option>
+                  <option value='ALLE'>Allegion</option>
+                  <option value='AGN'>Allergan, Plc</option>
+                  <option value='ADS'>Alliance Data Systems</option>
+                  <option value='LNT'>Alliant Energy Corp</option>
+                  <option value='ALL'>Allstate Corp</option>
+                  <option value='GOOGL'>Alphabet Inc Class A</option>
+                  <option value='GOOG'>Alphabet Inc Class C</option>
+                  <option value='MO'>Altria Group Inc</option>
+                  <option value='AMZN'>Amazon.com Inc</option>
+                  <option value='AEE'>Ameren Corp</option>
+                  <option value='AAL'>American Airlines Group</option>
+                </select>
 
-              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
-                <br>
-                | Select your delivery frequency  
-              <select name="state" id="tags" style="width:265px;font-size:16px;padding-top:10px;padding-bottom:10px;height:43px;border-radius:4px !important;line-height:1.7 !important;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;border: 1px solid #ccc !important;padding-left:5px;font-family: Avenir !important;" >
-              <option value="1">Daily</option>
-              <option value="2">Weekly</option>
-              <option value="3">Monthly</option>
-              </select>
-              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
-                <br>
-                | Select your delivery frequency    
-              
-              <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type="text" min="0" name="g1" id="g1" class="form-control" >
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
+                  <br>
+                  | Select your delivery frequency  
+                <select name="state" id="frequency" style="width:265px;font-size:16px;padding-top:10px;padding-bottom:10px;height:43px;border-radius:4px !important;line-height:1.7 !important;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;border: 1px solid #ccc !important;padding-left:5px;font-family: Avenir !important;" >
+                <option value="1">Daily</option>
+                <option value="2">Weekly</option>
+                <option value="3">Monthly</option>
+                </select>
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
+                  <br>
+                  | Enter your email    
+                
+                <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='email', name='email', id='email', placeholder='Email', autofocus, required class="form-control" >
+
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
+                  <br>
+                  | Enter your password    
+                
+                <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='password', name='password', id='password', placeholder='Password' class="form-control" >
             
               <br>
               <br>
 
-              #signup_button2.btn.btn-md.btn-hover.btn-default(onclick='login()') Sign up
+              #signup_button2.btn.btn-md.btn-hover.btn-default(onclick='signup()') Sign up
 
               
             

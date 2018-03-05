@@ -11,7 +11,6 @@ const User = require('../models/User');
 exports.getLogin = (req, res) => {
   if (req.user) {
     return res.redirect('/');
-
   }
   res.render('account/login', {
     title: 'Login'
@@ -41,9 +40,7 @@ exports.postLogin = (req, res, next) => {
       return res.redirect('/');
     }
     req.logIn(user, (err) => {
-
       if (err) { return next(err); }
-
       //login popup
       //req.flash('success', { msg: 'Success! You are logged in.' });
       res.redirect(req.session.returnTo || '/');
@@ -73,19 +70,14 @@ exports.getSignup = (req, res) => {
   });
 };
 
-
-//First stripe requirements
-const keyPublishable = process.env.STRIPE_PKEY;
-const keySecret = process.env.STRIPE_SKEY;
-const stripe = require("stripe")(keySecret);
-
 /**
  * POST /signup
- * Create a new local account, charge customer, save stripe id to User DB.
+ * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
+  //req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
@@ -97,8 +89,7 @@ exports.postSignup = (req, res, next) => {
 
   const user = new User({
     email: req.body.email,
-    password: req.body.password,
-    user_type: req.body.user_type,
+    password: req.body.password
   });
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {
@@ -108,7 +99,6 @@ exports.postSignup = (req, res, next) => {
       return res.redirect('/signup');
     }
     user.save((err) => {
-
       if (err) { return next(err); }
       req.logIn(user, (err) => {
         if (err) {
@@ -118,40 +108,6 @@ exports.postSignup = (req, res, next) => {
       });
     });
   });
-
-
-  //create the customer, define the plan
-  stripe.customers.create({
-    email: req.body.stripeEmail,
-    source: req.body.stripeToken,
-    plan: "find_me_monthly",
-    //plan: "1_25_monthly",
-  }, function(err, customer) {
-
-
-    //save customer ID to user wer just created above
-    User.findById(req.user.id, (err, user) => {
-      if (err) { return next(err); }
-      user.customer_id = customer.id;
-      user.save((err) => {
-        if (err) {
-          if (err.code === 11000) {
-            req.flash('errors', { msg: 'The email address you have entered is already associated with an account.' });
-            return res.redirect('/account');
-          }
-          return next(err);
-        }
-      });
-    });
-
-    console.log(customer.id)
-  })
-
-    //charge the customer
-    .then(function(charge) {
-
-    });
-
 };
 
 /**
@@ -167,7 +123,6 @@ exports.getAccount = (req, res) => {
 /**
  * POST /account/profile
  * Update profile information.
- * Allow cancellation of subscriptions
  */
 exports.postUpdateProfile = (req, res, next) => {
   req.assert('email', 'Please enter a valid email address.').isEmail();
@@ -183,7 +138,6 @@ exports.postUpdateProfile = (req, res, next) => {
   User.findById(req.user.id, (err, user) => {
     if (err) { return next(err); }
     user.email = req.body.email || '';
-    user.user_type = req.body.user_type || '';
     user.profile.name = req.body.name || '';
     user.profile.gender = req.body.gender || '';
     user.profile.location = req.body.location || '';
@@ -208,7 +162,7 @@ exports.postUpdateProfile = (req, res, next) => {
  */
 exports.postUpdatePassword = (req, res, next) => {
   req.assert('password', 'Password must be at least 4 characters long').len(4);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  //req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
   const errors = req.validationErrors();
 
@@ -233,23 +187,12 @@ exports.postUpdatePassword = (req, res, next) => {
  * Delete user account.
  */
 exports.postDeleteAccount = (req, res, next) => {
-  stripe.customers.del(
-  req.user.customer_id,
-  function(err, confirmation) {
-    "Stripe deleted"
-    // asynchronously called
-    }
-  );
-
   User.remove({ _id: req.user.id }, (err) => {
     if (err) { return next(err); }
     req.logout();
     req.flash('info', { msg: 'Your account has been deleted.' });
     res.redirect('/');
   });
-
-
-
 };
 
 /**
