@@ -14,33 +14,52 @@ block content
       <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
       <link href="../css/select2.min.css" rel="stylesheet">
       script.
+
+
+
         $(document).ready(function() {
           $('.js-example-basic-single_2').select2();
-          
-
 
         });
 
+        function update_data() {
+          document.getElementById("update-form").submit();
+        }
+
+
         window.onload = function start(){
+          //parse the params_json data attached to User model
           var params_json = document.getElementById("params_json").value;
           var params_json_1 = JSON.parse(params_json);
-          console.log(params_json_1.user.subreddits);
-          console.log(params_json_1.user.frequency);
+          
 
-          //push weight summary stats to html
           
-          
+          //push the User's desired delivery frequency to the selector element
           var frequency = document.getElementById("frequency");
-
           frequency.value = params_json_1.user.frequency;
+          console.log(params_json_1);
           subreddits_stg = params_json_1.user.subreddits;
 
-          //document.getElementById("frequency").value = params_json_1.user.subreddits;
+          //push the User's desired subreddits to the selector element
 
-          $.each(subreddits_stg.split(","), function(i,e){
-              document.getElementById("subreddits").value += e;
+          //--Create an array from the comma-separated string from JSON parsed data
+          var subreddits_stg_2 = subreddits_stg.split(',');
+
+          //--Loop through array, push to selector box
+          $.each(subreddits_stg_2, function (i, item) {
+              $('#subreddits').append($('<option>', { 
+                  value: item,
+                  text: item,
+                  selected: true
+
+              }));
+              
           });
-          }
+
+
+
+          };
+
 
 
 
@@ -49,23 +68,29 @@ block content
         .container
           .row
             .col-md-10-col-md-offset-1(style='text-align:center')
-              input(type='hidden', id="params_json", value= JSON.stringify(locals))
-              h3(style="padding-top:10px;") Welcome
-              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
-                | Your subreddits
+              form.form-horizontal(id='update-form', action='/account/profile', method='POST')
+                input(type='hidden', name='_csrf', value=_csrf)
+                input(type='hidden', id="params_json", value= JSON.stringify(locals))
+                h3(style="padding-top:10px;") Welcome
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
+                  | Your subreddits
 
-              //<select multiple="multiple" class="js-example-basic-single_2" name="subreddits" id="subreddits" style="width:265px;font-size:16px;" >
-                <option value='MMM'>3M Company</option>
-                </select>
+                <select multiple="multiple" class="js-example-basic-single_2" name="subreddits" id="subreddits" style="width:265px;font-size:16px;" >
+                  <option value='MMM'>3M Company</option>
+                  </select>
 
 
-              <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='subreddits', id='subreddits', autofocus, required class="form-control" >
-              <br>
-              <br>
-              p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
-                | Your frequency
-              <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='frequency', id='frequency', autofocus, required class="form-control" >
+                //<input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='subreddits', id='subreddits', autofocus, required class="form-control" >
+
+                <br>
+                <br>
+                p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
+                  | Your frequency
+                <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='frequency', id='frequency', autofocus, required class="form-control" >
    
+              <br>
+              <br>
+              #signup_button2.btn.btn-md.btn-hover.btn-default(onclick='update_data()') Update
 
 
 
@@ -194,6 +219,9 @@ block content
         function signup() {
         document.getElementById("signup-form").submit();
         }
+
+
+
         window.onload = function start(){
         //allow submitting with enter key - Signup Form
         $('#signup-form').keydown(function(e) {
