@@ -15,10 +15,25 @@ block content
       <link href="../css/select2.min.css" rel="stylesheet">
       script.
 
-
-
         $(document).ready(function() {
-          $('.js-example-basic-single_2').select2();
+
+          //$('.js-example-basic-single_2').select2();
+
+          $('.js-example-basic-single_2').select2({
+            //sort the options
+            sorter: function(data) {
+                return data.sort(function (a, b) {
+                    if (a.text > b.text) {
+                        return 1;
+                    }
+                    if (a.text < b.text) {
+                        return -1;
+                    }
+                    return 0;
+                });
+            }  
+          })
+
 
         });
 
@@ -76,8 +91,93 @@ block content
                   | Your subreddits
 
                 <select multiple="multiple" class="js-example-basic-single_2" name="subreddits" id="subreddits" style="width:265px;font-size:16px;" >
-                  <option value='MMM'>3M Company</option>
-                  </select>
+                <option value='funny'>funny</option>
+                <option value='todayilearned'>todayilearned</option>
+                <option value='science'>science</option>
+                <option value='worldnews'>worldnews</option>
+                <option value='gaming'>gaming</option>
+                <option value='videos'>videos</option>
+                <option value='movies'>movies</option>
+                <option value='Music'>Music</option>
+                <option value='aww'>aww</option>
+                <option value='news'>news</option>
+                <option value='explainlikeimfive'>explainlikeimfive</option>
+                <option value='askscience'>askscience</option>
+                <option value='EarthPorn'>EarthPorn</option>
+                <option value='books'>books</option>
+                <option value='television'>television</option>
+                <option value='LifeProTips'>LifeProTips</option>
+                <option value='mildlyinteresting'>mildlyinteresting</option>
+                <option value='space'>space</option>
+                <option value='Showerthoughts'>Showerthoughts</option>
+                <option value='DIY'>DIY</option>
+                <option value='Jokes'>Jokes</option>
+                <option value='sports'>sports</option>
+                <option value='gadgets'>gadgets</option>
+                <option value='tifu'>tifu</option>
+                <option value='InternetIsBeautiful'>InternetIsBeautiful</option>
+                <option value='nottheonion'>nottheonion</option>
+                <option value='photoshopbattles'>photoshopbattles</option>
+                <option value='food'>food</option>
+                <option value='history'>history</option>
+                <option value='Futurology'>Futurology</option>
+                <option value='Documentaries'>Documentaries</option>
+                <option value='dataisbeautiful'>dataisbeautiful</option>
+                <option value='personalfinance'>personalfinance</option>
+                <option value='listentothis'>listentothis</option>
+                <option value='UpliftingNews'>UpliftingNews</option>
+                <option value='GetMotivated'>GetMotivated</option>
+                <option value='OldSchoolCool'>OldSchoolCool</option>
+                <option value='philosophy'>philosophy</option>
+                <option value='Art'>Art</option>
+                <option value='nosleep'>nosleep</option>
+                <option value='creepy'>creepy</option>
+                <option value='WritingPrompts'>WritingPrompts</option>
+                <option value='TwoXChromosomes'>TwoXChromosomes</option>
+                <option value='Fitness'>Fitness</option>
+                <option value='technology'>technology</option>
+                <option value='WTF'>WTF</option>
+                <option value='bestof'>bestof</option>
+                <option value='AdviceAnimals'>AdviceAnimals</option>
+                <option value='politics'>politics</option>
+                <option value='atheism'>atheism</option>
+                <option value='europe'>europe</option>
+                <option value='interestingasfuck'>interestingasfuck</option>
+                <option value='woahdude'>woahdude</option>
+                <option value='leagueoflegends'>leagueoflegends</option>
+                <option value='pcmasterrace'>pcmasterrace</option>
+                <option value='BlackPeopleTwitter'>BlackPeopleTwitter</option>
+                <option value='gameofthrones'>gameofthrones</option>
+                <option value='trees'>trees</option>
+                <option value='reactiongifs'>reactiongifs</option>
+                <option value='Unexpected'>Unexpected</option>
+                <option value='Overwatch'>Overwatch</option>
+                <option value='Android'>Android</option>
+                <option value='oddlysatisfying'>oddlysatisfying</option>
+                <option value='Games'>Games</option>
+                <option value='programming'>programming</option>
+                <option value='wholesomememes'>wholesomememes</option>
+                <option value='nba'>nba</option>
+                <option value='cringepics'>cringepics</option>
+                <option value='facepalm'>facepalm</option>
+                <option value='me_irl'>me_irl</option>
+                <option value='relationships'>relationships</option>
+                <option value='Frugal'>Frugal</option>
+                <option value='pokemon'>pokemon</option>
+                <option value='soccer'>soccer</option>
+                <option value='lifehacks'>lifehacks</option>
+                <option value='pokemongo'>pokemongo</option>
+                <option value='ImGoingToHellForThis'>ImGoingToHellForThis</option>
+                <option value='fffffffuuuuuuuuuuuu'>fffffffuuuuuuuuuuuu</option>
+                <option value='tattoos'>tattoos</option>
+                <option value='comics'>comics</option>
+                <option value='malefashionadvice'>malefashionadvice</option>
+                <option value='OutOfTheLoop'>OutOfTheLoop</option>
+                <option value='StarWars'>StarWars</option>
+                <option value='CrappyDesign'>CrappyDesign</option>
+                <option value='YouShouldKnow'>YouShouldKnow</option>
+                <option value='nfl'>nfl</option>                  
+                </select>
 
 
                 //<input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='subreddits', id='subreddits', autofocus, required class="form-control" >
@@ -86,7 +186,12 @@ block content
                 <br>
                 p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
                   | Your frequency
-                <input style="text-align:center;width:265px !important;display:inline;padding-left:5px;margin-left:5px;border-radius:4px;height:43px" type='text', name='frequency', id='frequency', autofocus, required class="form-control" >
+                <select name="frequency" id="frequency" style="width:265px;font-size:16px;padding-top:10px;padding-bottom:10px;height:43px;border-radius:4px !important;line-height:1.7 !important;box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;border: 1px solid #ccc !important;padding-left:5px;font-family: Avenir !important;" >
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                </select>
+
    
               <br>
               <br>
@@ -123,8 +228,20 @@ block content
 
       script.
         $(document).ready(function() {
-            $('.js-example-basic-single').select2();
-
+          $('.js-example-basic-single').select2({
+            //sort the options
+            sorter: function(data) {
+                return data.sort(function (a, b) {
+                    if (a.text > b.text) {
+                        return 1;
+                    }
+                    if (a.text < b.text) {
+                        return -1;
+                    }
+                    return 0;
+                });
+            }  
+          })
         });
 
 
@@ -139,38 +256,92 @@ block content
                 p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px;') 
                   | Select your favorite subreddits  
                 <select multiple="multiple" class="js-example-basic-single" name="subreddits" id="subreddits" style="width:265px;font-size:16px;" >
-                  <option value='MMM'>3M Company</option>
-                  <option value='ABT'>Abbott Laboratories</option>
-                  <option value='ABBV'>AbbVie Inc.</option>
-                  <option value='ACN'>Accenture plc</option>
-                  <option value='ATVI'>Activision Blizzard</option>
-                  <option value='AYI'>Acuity Brands Inc</option>
-                  <option value='ADBE'>Adobe Systems Inc</option>
-                  <option value='AMD'>Advanced Micro Devices Inc</option>
-                  <option value='AAP'>Advance Auto Parts</option>
-                  <option value='AES'>AES Corp</option>
-                  <option value='AET'>Aetna Inc</option>
-                  <option value='AMG'>Affiliated Managers Group Inc</option>
-                  <option value='AFL'>AFLAC Inc</option>
-                  <option value='A'>Agilent Technologies Inc</option>
-                  <option value='APD'>Air Products & Chemicals Inc</option>
-                  <option value='AKAM'>Akamai Technologies Inc</option>
-                  <option value='ALK'>Alaska Air Group Inc</option>
-                  <option value='ALB'>Albemarle Corp</option>
-                  <option value='ARE'>Alexandria Real Estate Equities Inc</option>
-                  <option value='ALXN'>Alexion Pharmaceuticals</option>
-                  <option value='ALGN'>Align Technology</option>
-                  <option value='ALLE'>Allegion</option>
-                  <option value='AGN'>Allergan, Plc</option>
-                  <option value='ADS'>Alliance Data Systems</option>
-                  <option value='LNT'>Alliant Energy Corp</option>
-                  <option value='ALL'>Allstate Corp</option>
-                  <option value='GOOGL'>Alphabet Inc Class A</option>
-                  <option value='GOOG'>Alphabet Inc Class C</option>
-                  <option value='MO'>Altria Group Inc</option>
-                  <option value='AMZN'>Amazon.com Inc</option>
-                  <option value='AEE'>Ameren Corp</option>
-                  <option value='AAL'>American Airlines Group</option>
+                <option value='funny'>funny</option>
+                <option value='todayilearned'>todayilearned</option>
+                <option value='science'>science</option>
+                <option value='worldnews'>worldnews</option>
+                <option value='gaming'>gaming</option>
+                <option value='videos'>videos</option>
+                <option value='movies'>movies</option>
+                <option value='Music'>Music</option>
+                <option value='aww'>aww</option>
+                <option value='news'>news</option>
+                <option value='explainlikeimfive'>explainlikeimfive</option>
+                <option value='askscience'>askscience</option>
+                <option value='EarthPorn'>EarthPorn</option>
+                <option value='books'>books</option>
+                <option value='television'>television</option>
+                <option value='LifeProTips'>LifeProTips</option>
+                <option value='mildlyinteresting'>mildlyinteresting</option>
+                <option value='space'>space</option>
+                <option value='Showerthoughts'>Showerthoughts</option>
+                <option value='DIY'>DIY</option>
+                <option value='Jokes'>Jokes</option>
+                <option value='sports'>sports</option>
+                <option value='gadgets'>gadgets</option>
+                <option value='tifu'>tifu</option>
+                <option value='InternetIsBeautiful'>InternetIsBeautiful</option>
+                <option value='nottheonion'>nottheonion</option>
+                <option value='photoshopbattles'>photoshopbattles</option>
+                <option value='food'>food</option>
+                <option value='history'>history</option>
+                <option value='Futurology'>Futurology</option>
+                <option value='Documentaries'>Documentaries</option>
+                <option value='dataisbeautiful'>dataisbeautiful</option>
+                <option value='personalfinance'>personalfinance</option>
+                <option value='listentothis'>listentothis</option>
+                <option value='UpliftingNews'>UpliftingNews</option>
+                <option value='GetMotivated'>GetMotivated</option>
+                <option value='OldSchoolCool'>OldSchoolCool</option>
+                <option value='philosophy'>philosophy</option>
+                <option value='Art'>Art</option>
+                <option value='nosleep'>nosleep</option>
+                <option value='creepy'>creepy</option>
+                <option value='WritingPrompts'>WritingPrompts</option>
+                <option value='TwoXChromosomes'>TwoXChromosomes</option>
+                <option value='Fitness'>Fitness</option>
+                <option value='technology'>technology</option>
+                <option value='WTF'>WTF</option>
+                <option value='bestof'>bestof</option>
+                <option value='AdviceAnimals'>AdviceAnimals</option>
+                <option value='politics'>politics</option>
+                <option value='atheism'>atheism</option>
+                <option value='europe'>europe</option>
+                <option value='interestingasfuck'>interestingasfuck</option>
+                <option value='woahdude'>woahdude</option>
+                <option value='leagueoflegends'>leagueoflegends</option>
+                <option value='pcmasterrace'>pcmasterrace</option>
+                <option value='BlackPeopleTwitter'>BlackPeopleTwitter</option>
+                <option value='gameofthrones'>gameofthrones</option>
+                <option value='trees'>trees</option>
+                <option value='reactiongifs'>reactiongifs</option>
+                <option value='Unexpected'>Unexpected</option>
+                <option value='Overwatch'>Overwatch</option>
+                <option value='Android'>Android</option>
+                <option value='oddlysatisfying'>oddlysatisfying</option>
+                <option value='Games'>Games</option>
+                <option value='programming'>programming</option>
+                <option value='wholesomememes'>wholesomememes</option>
+                <option value='nba'>nba</option>
+                <option value='cringepics'>cringepics</option>
+                <option value='facepalm'>facepalm</option>
+                <option value='me_irl'>me_irl</option>
+                <option value='relationships'>relationships</option>
+                <option value='Frugal'>Frugal</option>
+                <option value='pokemon'>pokemon</option>
+                <option value='soccer'>soccer</option>
+                <option value='lifehacks'>lifehacks</option>
+                <option value='pokemongo'>pokemongo</option>
+                <option value='ImGoingToHellForThis'>ImGoingToHellForThis</option>
+                <option value='fffffffuuuuuuuuuuuu'>fffffffuuuuuuuuuuuu</option>
+                <option value='tattoos'>tattoos</option>
+                <option value='comics'>comics</option>
+                <option value='malefashionadvice'>malefashionadvice</option>
+                <option value='OutOfTheLoop'>OutOfTheLoop</option>
+                <option value='StarWars'>StarWars</option>
+                <option value='CrappyDesign'>CrappyDesign</option>
+                <option value='YouShouldKnow'>YouShouldKnow</option>
+                <option value='nfl'>nfl</option>                  
                 </select>
 
                 p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;') 
