@@ -11,8 +11,8 @@ table.dataTable.cell-border tbody th, table.dataTable.cell-border tbody td {
   border-left: 1px solid rgba(255, 255, 255, 0.15) !important; }
 
 .stripe-button-el {
-  width:150px !important;
-}
+  width: 150px !important; }
+
 #stripes {
   width: 100%;
   height: auto;
@@ -4147,7 +4147,7 @@ tbody.collapse.in {
     margin-right: 0; } }
 
 .navbar-default {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #f7a76f !important;
   border-color: rgba(238, 238, 238, 0.9); }
 
 .navbar-default .navbar-brand {
@@ -9502,7 +9502,6 @@ body {
   font-family: Avenir, sans-serif !important; }
 
 .navbar-default {
-  background-color: #fff !important;
   border-color: #e7e7e7; }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
@@ -9753,26 +9752,26 @@ p.paragraph span {
   transition: color .25s ease-in-out; }
 
 a.navbar-brand {
-  color: #21ce99 !important;
+  color: #fff !important;
   font-family: Avenir,Lato,sans-serif !important;
-  font-weight: bold;
+  font-weight: normal;
   font-size: 145%; }
 
 .navbar-default .navbar-nav > li > a {
   font-size: 15px !important;
   font-weight: 600 !important;
   text-transform: inherit !important;
-  color: #333 !important;
+  color: #fff !important;
   transition: all 0.2s linear; }
 
 .navbar-default .navbar-nav > li > a:hover {
-  color: #ff5722 !important; }
+  color: #40407a !important; }
 
 a:hover, a:focus {
-  color: #ff5722 !important; }
+  color: #40407a !important; }
 
 a.navbar-brand:hover {
-  color: #ff5722 !important; }
+  color: #40407a !important; }
 
 input.form-control {
   width: 100% !important; }
@@ -9908,7 +9907,7 @@ html {
   min-height: 100%; }
 
 body {
-  padding-top: 60px;
+  padding-top: 0px;
   margin-bottom: 75px; }
 
 footer {
