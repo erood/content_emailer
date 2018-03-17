@@ -25,16 +25,16 @@ table.dataTable.cell-border tbody th, table.dataTable.cell-border tbody td {
   width: 200px !important;
   line-height: 2 !important;
   border: 1px solid #ccc !important;
-  background-color: #115fd8 !important;
+  background-color: #341f97 !important;
   color: #fff !important;
   font-size: 20px !important;
   font-weight: bold !important; }
 
 #signup_button2.btn-default:hover {
-  color: #333 !important;
+  /*color: #333 !important;
   background-color: #fff !important;
-  font-weight: bold !important;
-  border: 1px solid #20f4cb !important; }
+  font-weight: bold !important;*/
+  border: 2px solid #f99854 !important; }
 
 html {
   font-family: sans-serif;
@@ -4147,7 +4147,7 @@ tbody.collapse.in {
     margin-right: 0; } }
 
 .navbar-default {
-  background-color: #f7a76f !important;
+  background-color: #f99854 !important;
   border-color: rgba(238, 238, 238, 0.9); }
 
 .navbar-default .navbar-brand {
@@ -9836,10 +9836,10 @@ h1, h2, h3, h4, h5, h6,
   font-weight: bold !important; }
 
 #signup_button.btn-default:hover {
-  color: #333 !important;
+  color: #fff !important;
   background-color: #fff !important;
   font-weight: bold !important;
-  border: 1px solid #20f4cb !important; }
+    border: 2px solid #f99854 !important; }
 
 #login.btn {
   width: 30% !important;
@@ -9852,7 +9852,7 @@ h1, h2, h3, h4, h5, h6,
 
 .btn-default:hover {
   color: #333;
-  background-color: #fff7e4  !important;
+  /*background-color: #fff7e4  !important;*/
   border: 1px solid #2196f3 !important; }
 
 .form-control:focus {
