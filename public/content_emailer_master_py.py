@@ -252,8 +252,9 @@ for index, row in users.iterrows():
         
         ###################make this a function eventually--###################
         
-        
-    elif row['frequency'] == 'Weekly' and datetime.datetime.today().weekday() == 2:
+        #Tuesday = 1
+        #Wednesday = 2
+    elif row['frequency'] == 'Weekly' and datetime.datetime.today().weekday() == 1:
         
         #variables
         praw_freq = 'week'
