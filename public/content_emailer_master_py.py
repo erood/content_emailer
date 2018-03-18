@@ -108,7 +108,7 @@ def SendEmail(to_email):
     </div>
 
     <p class='colored'>
-    To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.erikrood.com>click here</a>. 
+    To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.storyrake.com>click here</a>. 
     </p>
     """
 
