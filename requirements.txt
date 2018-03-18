@@ -3,7 +3,6 @@ pandas
 pprint
 numpy
 praw
-operator
 datetime
 smtplib
 email.mime.multipart
