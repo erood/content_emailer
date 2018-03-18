@@ -4,5 +4,3 @@ pprint
 numpy
 praw
 datetime
-email
-cStringIO
