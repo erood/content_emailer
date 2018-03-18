@@ -4,5 +4,3 @@ pprint
 numpy
 praw
 datetime
-email.mime.multipart
-email.mime.text
