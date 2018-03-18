@@ -4,3 +4,4 @@ pprint
 numpy
 praw
 datetime
+email
