@@ -5,3 +5,4 @@ numpy
 praw
 datetime
 email
+cStringIO
