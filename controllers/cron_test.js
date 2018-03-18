@@ -31,7 +31,7 @@ function runPythonScript() {
 // seconds: * * * * * *
 // everyday at 6am west coast: 0 6 * * *
 
-new CronJob('0 6 * * *', function() {
+/*new CronJob('0 6 * * *', function() {
   console.log('You will see this message every day at 6am PST');
   runPythonScript();
-}, null, true, 'America/Los_Angeles');
+}, null, true, 'America/Los_Angeles');*/
