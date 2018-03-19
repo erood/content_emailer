@@ -387,72 +387,72 @@ block content
           <br>
           <br>
           <br>
-          </div>
-  br
-  br
-  #landing.container
-    .row
-      .col-md-1
-      .col-md-5
-        
-        h3(style="font-weight:500 !important;color:#341f97 !important;padding-top:20px !important;font-size:30px;padding-bottom:10px;")
-          | How it works
-        p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px')
+      </div>
+      br
+      br
+      #landing.container
+        .row
+          .col-md-1
+          .col-md-5
+            
+            h3(style="font-weight:500 !important;color:#341f97 !important;padding-top:20px !important;font-size:30px;padding-bottom:10px;")
+              | How it works
+            p.paragraph(style='font-size:22px;line-height:1.5;color:#71828c;padding-top:5px')
+              
+              span ✔ 
+              | Select your favorite subreddits
+              br
+              br
+              span ✔ 
+              | Choose how often you'd like to receive an email summary
+              br
+              br            
+              span ✔ 
+              | We'll search (ahem, 'rake') through your subreddits and collect the top stories
+              br
+              br
+              span ✔ 
+              | You'll receive a personalized Reddit summary in your inbox
+              br
+              
+              br
+              br
+            
           
-          span ✔ 
-          | Select your favorite subreddits
-          br
-          br
-          span ✔ 
-          | Choose how often you'd like to receive an email summary
-          br
-          br            
-          span ✔ 
-          | We'll search (ahem, 'rake') through your subreddits and collect the top stories
-          br
-          br
-          span ✔ 
-          | You'll receive a personalized Reddit summary in your inbox
-          br
-          
-          br
-          br
-        
-      
-      .col-md-5
+          .col-md-5
+            br
+            br
+            img.img-fluid(src='/images/rake_subreddits.png', alt='Mescale', style='max-width:60%;height:auto;border:none;text-align: center;')
+            
+          .col-md-1
+
+          // End mc_embed_signup  
+      //.background_image(style='background-image: url(/800_600_background.png);height:100%;background-repeat: no-repeat;padding-top:-100px;background-size:100%')  
+      //p.paragraph(style='font-size:20px;line-height:1.5;color:#4f4c52;')
         br
+        span Creators
         br
-        img.img-fluid(src='/images/rake_subreddits.png', alt='Mescale', style='max-width:60%;height:auto;border:none;text-align: center;')
-        
-      .col-md-1
-
-      // End mc_embed_signup  
-  //.background_image(style='background-image: url(/800_600_background.png);height:100%;background-repeat: no-repeat;padding-top:-100px;background-size:100%')  
-  //p.paragraph(style='font-size:20px;line-height:1.5;color:#4f4c52;')
-    br
-    span Creators
-    br
-    | Want to be added to our site?
-    br
-    | Submit your info
-  //#signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/records'") Get started
+        | Want to be added to our site?
+        br
+        | Submit your info
+      //#signup_button.btn.btn-md.btn-hover.btn-default(onclick="location.href='/records'") Get started
 
 
 
-  script.
-    function signup() {
-    document.getElementById("signup-form").submit();
-    }
+      script.
+        function signup() {
+        document.getElementById("signup-form").submit();
+        }
 
 
 
-    window.onload = function start(){
-    //allow submitting with enter key - Signup Form
-    $('#signup-form').keydown(function(e) {
-    var key = e.which;
-    if (key == 13) {
-    // As ASCII code for ENTER key is "13"
-    document.getElementById("signup-form").submit();
-    }
-    });
-    }
+        window.onload = function start(){
+        //allow submitting with enter key - Signup Form
+        $('#signup-form').keydown(function(e) {
+        var key = e.which;
+        if (key == 13) {
+        // As ASCII code for ENTER key is "13"
+        document.getElementById("signup-form").submit();
+        }
+        });
+        }
