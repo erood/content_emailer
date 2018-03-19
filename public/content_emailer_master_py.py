@@ -37,7 +37,7 @@ def SendEmail(to_email):
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
-    from_address = "storyrake@gmail.com"
+    from_address = "erood20@gmail.com"
     to_address = to_email
 
     # Create message container - the correct MIME type is multipart/alternative.
@@ -56,20 +56,35 @@ def SendEmail(to_email):
           .colored {
             font-size:16px;
           }
+           .footer {
+            font-size:12px;
+            font-color: #777;
+          }
           .reddit_table {
             border-spacing: 25px;
             font-size:16px;
             padding-left:0px;
 
           }
-          .row_title {
+
+          .subreddit_row {
             font-weight:bold;
-            color:#115fd8;
+            color:#341f97;
+            font-size:20px;
 
+            }  
+            .highlight{
+            border: 2px solid #f99854;
+            border-radius: 3px;
+            padding: 4px;
             }
+          .container{
+            padding-left:20px;
 
+          }
           .col-md-8{
           max-width:80%;
+
           }
 
           #body {
@@ -80,7 +95,7 @@ def SendEmail(to_email):
         }
         </style>
       </head>
-
+      <div class="container">
       <body>
         <p class='colored'>Hi,<br>
         <br>
@@ -91,15 +106,18 @@ def SendEmail(to_email):
     html +=\
     """
     <div class="col-md-8">
-    <hr>
     <table class="reddit_table">
-    <thead class="row_title">
-    <td>Subreddit</td><td>Link</td><td>Score</td><td>Date</td>
-    </thead>
     """
 
     for index, row in df_final.iterrows():
-        html+="<tr><td>%s</td><td><a href=%s>%s</a></td><td>%s</td><td>%s</td></tr>" %(row['subreddit'], row['url'],row['title'], row['score'], row['time'])
+        if index % 5 == 0:
+            #html += ("<br>")
+            html += (("<tr class='subreddit_row'><td><span class='highlight'>%s</span></td></tr>" %(row['subreddit'] )))
+
+            #html += ("<thead class='row_title'><td>Link</td><td>Score</td><td>Date</td></thead>")
+        else:
+            pass
+        html += ("<tr><td><a href=%s>%s</a></td><td>%s</td><td>%s</td></tr>" %(row['url'],row['title'], row['score']+' pts', row['time']))
 
     html+=\
     """
@@ -107,9 +125,10 @@ def SendEmail(to_email):
     <hr>
     </div>
 
-    <p class='colored'>
-    To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.storyrake.com>click here</a>. 
+    <p class='footer'>
+    <i>To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.erikrood.com>click here</a><i>. 
     </p>
+    </div>
     """
 
     # Record the MIME types of both parts - text/plain and text/html.
@@ -122,8 +141,11 @@ def SendEmail(to_email):
 
 
     # Credentials (if needed)  
-    username = 'storyrake@gmail.com'  
-    password = 'zgatluyspdmsakag'  
+    #username = 'erood20@gmail.com'  
+    #password = 'uoyuktglpyvxqycv'  
+    username = 'storyrake@gmail.com'
+    password = 'zgatluyspdmsakag'
+
 
     # The actual mail send  
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -132,10 +154,10 @@ def SendEmail(to_email):
     server.login(username,password)  
     server.sendmail(from_address, to_address, msg.as_string())  
     server.quit()  
+    
 
-################################################################################################
-       
-#MAIN
+#MAIN 
+
 
 for index, row in users.iterrows():
     if row['frequency'] == 'Daily':
@@ -147,7 +169,7 @@ for index, row in users.iterrows():
         s_list = s_list.split(",")
 
         
-        ###################make this a function eventually--###################
+        ### Crawl reddit, clean output ###
         #dictionaries
         domains_sub = {}
         domains_score = {}
@@ -226,8 +248,8 @@ for index, row in users.iterrows():
 
         df_time = pd.DataFrame.from_dict(domains_time, orient='index').reset_index()
         df_time.columns = ['id','time']
-        
-        
+
+
         #merge the three tables together, using submission ID as primary key
         df_sub_score = df_subreddit.merge(df_score, how='left', on="id")
         df_title_score_sub = df_sub_score.merge(df_title, how='left', on='id')
@@ -246,15 +268,18 @@ for index, row in users.iterrows():
         #only keep top X for given subreddit
         df_final = df_final.groupby('subreddit').head(5)
         
+        #clean index to loop through 1 subreddit per 5 posts
+        df_final = df_final.reset_index()
+        df_final.drop(['index'], axis = 1, inplace = True)
         
-        ### SEND EMAIL ###
+        #store score as string so can label with points
+        df_final['score'] = df_final['score'].astype(str)
+        
+        ### Send email ###
         SendEmail(to_email)
+                
         
-        ###################make this a function eventually--###################
-        
-        #Tuesday = 1
-        #Wednesday = 2
-    elif row['frequency'] == 'Weekly' and datetime.datetime.today().weekday() == 1:
+    elif row['frequency'] == 'Weekly' and datetime.datetime.today().weekday() == 3:
         
         #variables
         praw_freq = 'week'
@@ -263,7 +288,7 @@ for index, row in users.iterrows():
         s_list = s_list.split(",")
 
         
-        ###################make this a function eventually--###################
+        ### Crawl reddit, clean output ###
         #dictionaries
         domains_sub = {}
         domains_score = {}
@@ -327,6 +352,8 @@ for index, row in users.iterrows():
                 if s.id in domains_time.keys():
                     #(1) works for generating total score:
                     domains_time[s.id] = datetime.datetime.fromtimestamp(s.created).date() #datetime.datetime.fromtimestamp(s.created)
+
+
                 else:
                     #(2)
                     #works for generating total score:
@@ -340,8 +367,8 @@ for index, row in users.iterrows():
 
         df_time = pd.DataFrame.from_dict(domains_time, orient='index').reset_index()
         df_time.columns = ['id','time']
-        
-        
+
+
         #merge the three tables together, using submission ID as primary key
         df_sub_score = df_subreddit.merge(df_score, how='left', on="id")
         df_title_score_sub = df_sub_score.merge(df_title, how='left', on='id')
@@ -359,12 +386,17 @@ for index, row in users.iterrows():
 
         #only keep top X for given subreddit
         df_final = df_final.groupby('subreddit').head(5)
-
         
+        #clean index to loop through 1 subreddit per 5 posts
+        df_final = df_final.reset_index()
+        df_final.drop(['index'], axis = 1, inplace = True)
         
-        ### SEND EMAIL ###
+        #store score as string so can label with points
+        df_final['score'] = df_final['score'].astype(str)
+        
+        ### Send email ###
         SendEmail(to_email)
-    
         
+
     else:
         pass
