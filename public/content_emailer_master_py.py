@@ -55,9 +55,10 @@ def SendEmail(to_email):
         <style>
           .colored {
             font-size:16px;
+            color:#4f4c52;
           }
            .footer {
-            font-size:12px;
+            font-size:14px;
             font-color: #777;
           }
           .reddit_table {
@@ -69,33 +70,36 @@ def SendEmail(to_email):
 
           .subreddit_row {
             font-weight:bold;
-            color:#341f97;
             font-size:20px;
-
+            color:#341f97;
             }  
+
             .highlight{
             border: 2px solid #f99854;
             border-radius: 3px;
             padding: 4px;
             }
           .container{
-            padding-left:20px;
+            padding-left:10px;
 
           }
           .col-md-8{
-          max-width:80%;
-
+          width:85%;
           }
 
-          #body {
-            font-size:16px;
-          }
-          #tr {
-
+        .link{
+        width:65% !important;
         }
-        </style>
-      </head>
-      <div class="container">
+        .score_date{
+        width:10% !important;
+        }
+          .reddit_table {
+          color: #4f4c52;
+        }
+    </style>
+  </head>
+      
+  <div class="container">
       <body>
         <p class='colored'>Hi,<br>
         <br>
@@ -117,7 +121,7 @@ def SendEmail(to_email):
             #html += ("<thead class='row_title'><td>Link</td><td>Score</td><td>Date</td></thead>")
         else:
             pass
-        html += ("<tr><td><a href=%s>%s</a></td><td>%s</td><td>%s</td></tr>" %(row['url'],row['title'], row['score']+' pts', row['time']))
+        html += ("<tr><td class='link'><a href=%s>%s</a></td><td class='score_date'>%s</td><td class='score_date'>%s</td></tr>" %(row['url'],row['title'], row['score']+' pts', row['time']))
 
     html+=\
     """
@@ -126,7 +130,7 @@ def SendEmail(to_email):
     </div>
 
     <p class='footer'>
-    <i>To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.erikrood.com>click here</a><i>. 
+    <i>To add/remove subreddits, change your preferred frequency, or unsubscribe <a href=www.storyrake.com>click here</a><i>. 
     </p>
     </div>
     """
@@ -154,7 +158,7 @@ def SendEmail(to_email):
     server.login(username,password)  
     server.sendmail(from_address, to_address, msg.as_string())  
     server.quit()  
-    
+
 
 #MAIN 
 
