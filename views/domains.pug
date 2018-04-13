@@ -64,32 +64,32 @@ block content
       .container
         #domains.h4 Filters
         
-        //.col-md-2
+        .col-md-2
           span(style='display:inline-block;font-size:110%') Subreddit:
           br
           span(style='display:inline-block;margin-left:1px;')#external_subreddit_filter
           hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
-        .col-md-2
+        //.col-md-2
           span(style='display:inline-block;font-size:110%') Category:
           br
           span(style='display:inline-block;margin-left:1px;margin-top:4px;')#external_cat_filter
           hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
-        .col-md-2
+        //.col-md-2
           span(style='display:inline-block;font-size:110%') # Submissions:
           br
           span(style='display:inline-block;margin-left:1px')#external_submissions_filter
           hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-        .col-md-2
+        //.col-md-2
           span(style='display:inline-block;font-size:110%') Average Upvotes:
           br
           span(style='display:inline-block;margin-left:1px')#external_score_filter
           hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-        .col-md-2
+        //.col-md-2
           span(style='display:inline-block;font-size:110%') Total Upvotes:
           br
           span(style='display:inline-block;margin-left:1px')#external_total_score_filter
           hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-        .col-md-2
+        //.col-md-2
           span(style='display:inline-block;font-size:110%') Domain (url):
           br
           span(style='display:inline-block;margin-left:1px;margin-top:5px;')#external_domain_filter
@@ -100,16 +100,17 @@ block content
     p.paragraph(style='font-size:15px;line-height:1.7;color:#333;') 
       | Last updated: 
       span 10/21/17
-      br
+    //  br
       | Percent image/video: 
       span 73%
     table#myTableData2.hover.responsive
       thead(style="background-color:#d5e9ff")
         tr
           th Domain
-          //th Subreddit
+          th Subreddit
           th Submissions
           th Average Upvotes
+          th Median Upvotes
           th Total Upvotes
           th Category
         tbody
@@ -191,25 +192,25 @@ block content
       } );
 
       yadcf.init(table, [
-        {
+        /*{
         column_number : 0,
         filter_type: "text",
         column_data_type: "text",
         html_data_type: "text",
         filter_container_id: 'external_domain_filter',
 
-        },
-        //{
-        //column_number : 1,
-        //filter_type: "select",
-        //column_data_type: "text",
-        //html_data_type: "text",
-        //sort_as: "alpha",
-        //sort_order: "asc",
-        //filter_container_id: 'external_subreddit_filter',
-
-        //},
+        },*/
         {
+        column_number : 1,
+        filter_type: "select",
+        column_data_type: "text",
+        html_data_type: "text",
+        sort_as: "alpha",
+        sort_order: "asc",
+        filter_container_id: 'external_subreddit_filter',
+
+        },
+        /*{
         column_number : 1,
         filter_container_id: 'external_submissions_filter',
         filter_type: "range_number",
@@ -225,14 +226,14 @@ block content
         filter_type: "range_number",
         },
         {
-        column_number : 4,
+        column_number : 4
         filter_type: "select",
         column_data_type: "text",
         html_data_type: "text",
         sort_as: "alpha",
         sort_order: "asc",
         filter_container_id: 'external_cat_filter',
-        },
+        },*/
         ]);
       } );
 
@@ -247,14 +248,13 @@ block content
       //var tr;
       for (var i = 0; i <k; i++) {
         tr = $('<tr>');
-        console.log(domains_json_value1.domain[i].domain)
-        //console.log(domains_json_value1.domain[i].score)
 
-        //console.log(domains_json_value1.domain[i].subreddit)
+
         tr.append("<td>" + domains_json_value1.domain[i].domain+"</td>");
-        //tr.append("<td>" + domains_json_value1.domain[i].subreddit+"</td>");
+        tr.append("<td>" + domains_json_value1.domain[i].subreddit+"</td>");
         tr.append("<td>" + domains_json_value1.domain[i].submissions+"</td>");
         tr.append("<td>" + Math.round(domains_json_value1.domain[i].avg_score)+"</td>");
+        tr.append("<td>" + Math.round(domains_json_value1.domain[i].median_score)+"</td>");
         tr.append("<td>" + Math.round(domains_json_value1.domain[i].total_upvotes)+"</td>");
         tr.append("<td>" + domains_json_value1.domain[i].classify+"</td>");
 
