@@ -181,6 +181,18 @@ block content
                   { responsivePriority: 1, targets: 0 },
                   { responsivePriority: 3, targets: 2 },
                   { responsivePriority: 2, targets: 4 },
+                  
+                  //hide the subreddit and period columns, since they'll be loaded in above
+                  {
+                      "targets": [ 1 ],
+                      "visible": false,
+                      "searchable": true
+                  },
+                  {
+                      "targets": [ 7 ],
+                      "visible": false,
+                      "searchable": true
+                  },
               ],
               //default sort by # of total upvotes desc order
               "order": [[ 5, "desc" ]],
@@ -209,6 +221,7 @@ block content
         {
         column_number : 1,
         filter_type: "select",
+
         column_data_type: "text",
         html_data_type: "text",
         sort_as: "alpha",
