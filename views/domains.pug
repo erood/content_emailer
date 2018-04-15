@@ -116,7 +116,7 @@ block content
           th Submissions
           th Average Upvotes
           th Median Upvotes
-          th Score
+          th Total Upvotes
           th Category
           th Period
         tbody
@@ -182,9 +182,14 @@ block content
                   { responsivePriority: 3, targets: 2 },
                   { responsivePriority: 2, targets: 4 },
 
-                  //hide the subreddit and period columns, since they'll be loaded in above
+                  //hide the subreddit, category, and period columns, since they'll be loaded in above
                   {
                       "targets": [ 1 ],
+                      "visible": false,
+                      "searchable": true
+                  },
+                  {
+                      "targets": [ 6 ],
                       "visible": false,
                       "searchable": true
                   },
