@@ -116,7 +116,7 @@ block content
           th Submissions
           th Average Upvotes
           th Median Upvotes
-          th Total Upvotes
+          th Score
           th Category
           th Period
         tbody
@@ -284,7 +284,7 @@ block content
         tr.append("<td>" + domains_json_value1.domain[i].submissions+"</td>");
         tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].avg_score)/1000*10)/10+"k"+"</td>");
         tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].median_score)/1000*10)/10+"k"+"</td>");
-        tr.append("<td>" + domains_json_value1.domain[i].avg_score*Math.log(domains_json_value1.domain[i].submissions)+"</td>");
+        tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].avg_score*Math.log(domains_json_value1.domain[i].submissions))/1000*10)/10+"k"+"</td>");
         //Math.round(Math.round(domains_json_value1.domain[i].total_upvotes)/1000*10)/10+"k"+"</td>");
         tr.append("<td>" + domains_json_value1.domain[i].classify+"</td>");
         tr.append("<td>" + domains_json_value1.domain[i].period+"</td>");
