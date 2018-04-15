@@ -9,7 +9,8 @@ const domainSchema = new mongoose.Schema({
   submissions: String,
   avg_score: Number,
   total_upvotes: Number,
-  update_date: Date
+  update_date: Date,
+  period: String
   
 
 }, { timestamps: true });

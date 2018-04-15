@@ -6,7 +6,7 @@ html
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='theme-color' content='#4DA5F4')
     meta(name='csrf-token', content=_csrf)
-    title #{title} - Find-me
+    title #{title} - Storyrake
     link(rel='shortcut icon', href='/favicon.png')
     link(rel='stylesheet', href='/css/main.css')
 
@@ -69,6 +69,11 @@ block content
           br
           span(style='display:inline-block;margin-left:1px;')#external_subreddit_filter
           hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
+        .col-md-2
+          span(style='display:inline-block;font-size:110%') Period:
+          br
+          span(style='display:inline-block;margin-left:1px;')#external_period_filter
+          hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
         //.col-md-2
           span(style='display:inline-block;font-size:110%') Category:
           br
@@ -113,6 +118,7 @@ block content
           th Median Upvotes
           th Total Upvotes
           th Category
+          th Period
         tbody
     .container(style='text-align:center;width:60%')
       br
@@ -208,6 +214,16 @@ block content
         sort_as: "alpha",
         sort_order: "asc",
         filter_container_id: 'external_subreddit_filter',
+
+        },
+        {
+        column_number : 7,
+        filter_type: "select",
+        column_data_type: "text",
+        html_data_type: "text",
+        sort_as: "alpha",
+        sort_order: "asc",
+        filter_container_id: 'external_period_filter',
 
         },
         /*{
