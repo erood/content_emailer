@@ -12,52 +12,29 @@ html
 
   body
     include partials/header
-
-
     .container
       include partials/flash
       block content
-
     include partials/footer
-
     //take these out when Datatables responsive is in: 
     //script(src='/js/lib/bootstrap.min.js')
     //script(src='/js/main.js')
 
-    // Google Analytics: change UA-XXXXX-X to be your site's ID
-    script.
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      ga('create', 'UA-XXXXX-X', 'auto');
-      ga('send', 'pageview');
-
 
 //end manual extend layout paste (interferes with account jquery dropdown)
 
+
 block content
-
-  //************************************************************//
-  //************************Begin pug**************************//
-  //***********************************************************//
-
   .container
     ul
       input(type='hidden', id="domains_json", value= JSON.stringify(locals))
   .container(style="text-align:center;")
     .col-md-6.col-md-offset-3
-      
       h3(style="font-weight:500 !important;color:#4f4c52 !important;padding-top:15px !important;") Reddit domain leaderboard
       p.paragraph(style='font-size:18px;line-height:1.7;text-align:center') 
         | This ranks domains that are submitted as links to Reddit.
         br
         | You can search/filter the datatable below by subreddit and period.
-        //.br
-        //br
-        //.p(style='font-size:110%') If you're a content creator who
-      
-    
     br
   .row
     .container
@@ -74,42 +51,10 @@ block content
         br
         span(style='display:inline-block;margin-left:1px;')#external_period_filter
         hr(style='height:4px; visibility:hidden;margin-top:1px;margin-bottom:0px')
-      //.col-md-2
-        span(style='display:inline-block;font-size:110%') Category:
-        br
-        span(style='display:inline-block;margin-left:1px;margin-top:4px;')#external_cat_filter
-        hr(style='height:4px; visibility:hidden;margin-top:6px;margin-bottom:0px')
-      //.col-md-2
-        span(style='display:inline-block;font-size:110%') # Submissions:
-        br
-        span(style='display:inline-block;margin-left:1px')#external_submissions_filter
-        hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-      //.col-md-2
-        span(style='display:inline-block;font-size:110%') Average Upvotes:
-        br
-        span(style='display:inline-block;margin-left:1px')#external_score_filter
-        hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-      //.col-md-2
-        span(style='display:inline-block;font-size:110%') Total Upvotes:
-        br
-        span(style='display:inline-block;margin-left:1px')#external_total_score_filter
-        hr(style='height:4px; visibility:hidden;margin-top:0px;margin-bottom:0px')
-      //.col-md-2
-        span(style='display:inline-block;font-size:110%') Domain (url):
-        br
-        span(style='display:inline-block;margin-left:1px;margin-top:5px;')#external_domain_filter
   br
-
 .container
   br
   br
-  //#domains.h4 Top domains on Reddit
-  //p.paragraph(style='font-size:15px;line-height:1.7;color:#333;') 
-    | Last updated: 
-    span 10/21/17
-  //  br
-    | Percent image/video: 
-    span 73%
   table#myTableData2.hover.responsive
     thead(style="background-color:#5a649a;color:#fff")
       tr
@@ -122,11 +67,15 @@ block content
         th Category
         th Period
       tbody
+  
+
   .container(style='text-align:center;width:60%')
     br
     br
     br
     .p(style='font-size:120%;font-weight:bold') [Storyrake CTA]
+    
+
     // Begin MailChimp Signup Form
     link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
     style(type='text/css').
@@ -149,139 +98,134 @@ block content
     br
     br
     // End mc_embed_signup
-  //************************************************************//
-  //************************scripts**************************//
-  //***********************************************************//
-  //jquery
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
-  ///responsive --
-  link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.css')
-  //responsive --
-  script(type='text/javascript', src='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.js')
-  //dataTables css
-  link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css')
-  //yadcf
-  //yadcf docs: http://yadcf-showcase.appspot.com/DOM_source_select2.html
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/yadcf/0.9.1/jquery.dataTables.yadcf.js')
-  link(href='https://yadcf-showcase.appspot.com/resources/css/jquery.dataTables.yadcf.css ', rel='stylesheet', type='text/css')
-  //functions
-  script.
-    var CSRF_HEADER = 'x-csrf-token';
-
-    var setCSRFToken = function (securityToken) {
-      jQuery.ajaxPrefilter(function (options, _, xhr) {
-        if (!xhr.crossDomain) {
-          xhr.setRequestHeader(CSRF_HEADER, securityToken);
-        }
-      });
-    };
-
-    //Datatable scripts
-    $(document).ready(function() {
-        $('#myTableData2').DataTable( {
-            "pagingType": "simple",
-            "paging": true,
-            responive: true,
-            columnDefs: [
-                { responsivePriority: 1, targets: 0 },
-                { responsivePriority: 3, targets: 2 },
-                { responsivePriority: 2, targets: 4 },
-
-                //hide the subreddit, category, and period columns, since they'll be loaded in above
-                {
-                    "targets": [ 1 ],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [ 6 ],
-                    "visible": false,
-                    "searchable": true
-                },
-                {
-                    "targets": [ 7 ],
-                    "visible": false,
-                    "searchable": true
-                },
-            ],
-            //default sort by # of total upvotes desc order
-            "order": [[ 5, "desc" ]],
-            "pageLength": 10
 
 
-        } );
 
-    //YADCF scripts
-    //initiate Datatable plug-in
-    var table = $('#myTableData2').DataTable();
-    // Event listener to the two range filtering inputs to redraw on input
-    $('#min, #max').keyup( function() {
-    table.draw();
-    } );
+    //************************************************************//
+    //************************scripts**************************//
+    //***********************************************************//
+    //jquery
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    ///responsive --
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.css')
+    //responsive --
+    script(type='text/javascript', src='https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/b-1.3.1/b-colvis-1.3.1/cr-1.3.3/fc-3.2.2/fh-3.1.2/r-2.1.1/rg-1.0.0/rr-1.2.0/sc-1.4.2/datatables.min.js')
+    //dataTables css
+    link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css')
+    //yadcf
+    //yadcf docs: http://yadcf-showcase.appspot.com/DOM_source_select2.html
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/yadcf/0.9.1/jquery.dataTables.yadcf.js')
+    link(href='https://yadcf-showcase.appspot.com/resources/css/jquery.dataTables.yadcf.css ', rel='stylesheet', type='text/css')
+    //functions
+    script.
+      var CSRF_HEADER = 'x-csrf-token';
 
-    yadcf.init(table, [
-      /*{
-      column_number : 0,
-      filter_type: "text",
-      column_data_type: "text",
-      html_data_type: "text",
-      filter_container_id: 'external_domain_filter',
+      var setCSRFToken = function (securityToken) {
+        jQuery.ajaxPrefilter(function (options, _, xhr) {
+          if (!xhr.crossDomain) {
+            xhr.setRequestHeader(CSRF_HEADER, securityToken);
+          }
+        });
+      };
 
-      },*/
-      {
-      column_number : 1,
-      filter_type: "select",
+      //Datatable scripts
+      $(document).ready(function() {
+          $('#myTableData2').DataTable( {
+              "pagingType": "simple",
+              "paging": true,
+              responive: true,
+              columnDefs: [
+                  { responsivePriority: 1, targets: 0 },
+                  { responsivePriority: 3, targets: 2 },
+                  { responsivePriority: 2, targets: 4 },
 
-      column_data_type: "text",
-      html_data_type: "text",
-      sort_as: "alpha",
-      sort_order: "asc",
-      filter_container_id: 'external_subreddit_filter',
+                  //hide the subreddit, category, and period columns, since they'll be loaded in above
+                  {
+                      "targets": [ 1 ],
+                      "visible": false,
+                      "searchable": true
+                  },
+                  {
+                      "targets": [ 6 ],
+                      "visible": false,
+                      "searchable": true
+                  },
+                  {
+                      "targets": [ 7 ],
+                      "visible": false,
+                      "searchable": true
+                  },
+              ],
+              //default sort by # of total upvotes desc order
+              "order": [[ 5, "desc" ]],
+              "pageLength": 10
 
-      },
-      {
-      column_number : 7,
-      filter_type: "select",
-      column_data_type: "text",
-      html_data_type: "text",
-      sort_as: "alpha",
-      sort_order: "asc",
-      filter_container_id: 'external_period_filter',
 
-      },
-      /*{
-      column_number : 1,
-      filter_container_id: 'external_submissions_filter',
-      filter_type: "range_number",
-      },
-      {
-      column_number : 2,
-      filter_container_id: 'external_score_filter',
-      filter_type: "range_number",
-      },
-      {
-      column_number : 3,
-      filter_container_id: 'external_total_score_filter',
-      filter_type: "range_number",
-      },
-      {
-      column_number : 4
-      filter_type: "select",
-      column_data_type: "text",
-      html_data_type: "text",
-      sort_as: "alpha",
-      sort_order: "asc",
-      filter_container_id: 'external_cat_filter',
-      },*/
-      ]);
-    } );
+          } );
 
-  script(type='text/javascript').
-    var domains_json = document.getElementById("domains_json").value;
-    var domains_json_value1 = JSON.parse(domains_json);
-    //console.log(domains_json_value1.domain[1].domain)
-    console.log(domains_json_value1.domain[1].domain)
-    k = domains_json_value1.domain.length
+      //YADCF scripts
+      //initiate Datatable plug-in
+      var table = $('#myTableData2').DataTable();
+      // Event listener to the two range filtering inputs to redraw on input
+      $('#min, #max').keyup( function() {
+      table.draw();
+      } );
+
+      yadcf.init(table, [
+
+        {
+        column_number : 1,
+        filter_type: "select",
+
+        column_data_type: "text",
+        html_data_type: "text",
+        sort_as: "alpha",
+        sort_order: "asc",
+        filter_container_id: 'external_subreddit_filter',
+
+        },
+        {
+        column_number : 7,
+        filter_type: "select",
+        column_data_type: "text",
+        html_data_type: "text",
+        sort_as: "alpha",
+        sort_order: "asc",
+        filter_container_id: 'external_period_filter',
+
+        },
+        /*{
+        column_number : 1,
+        filter_container_id: 'external_submissions_filter',
+        filter_type: "range_number",
+        },
+        {
+        column_number : 2,
+        filter_container_id: 'external_score_filter',
+        filter_type: "range_number",
+        },
+        {
+        column_number : 3,
+        filter_container_id: 'external_total_score_filter',
+        filter_type: "range_number",
+        },
+        {
+        column_number : 4
+        filter_type: "select",
+        column_data_type: "text",
+        html_data_type: "text",
+        sort_as: "alpha",
+        sort_order: "asc",
+        filter_container_id: 'external_cat_filter',
+        },*/
+        ]);
+      } );
+
+    script(type='text/javascript').
+      var domains_json = document.getElementById("domains_json").value;
+      var domains_json_value1 = JSON.parse(domains_json);
+      //console.log(domains_json_value1.domain[1].domain)
+      console.log(domains_json_value1.domain[1].domain)
 
 
       function commaSeparateNumber(val){
@@ -290,31 +234,32 @@ block content
         }
         return val;
       };
-    //$.parseJSON(domains_json,
-    //function (domains_json_value1) {
-    //var tr;
-    for (var i = 0; i <k; i++) {
-      tr = $('<tr>');
 
 
-      tr.append("<td>" + domains_json_value1.domain[i].domain+"</td>");
-      tr.append("<td>" + domains_json_value1.domain[i].subreddit+"</td>");
-      tr.append("<td>" + domains_json_value1.domain[i].submissions+"</td>");
-      tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].avg_score)/1000*10)/10+"k"+"</td>");
-      tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].median_score)/1000*10)/10+"k"+"</td>");
-      tr.append("<td>" + commaSeparateNumber(Math.round(domains_json_value1.domain[i].avg_score*domains_json_value1.domain[i].submissions))+"</td>");
-      //Math.round(Math.round(domains_json_value1.domain[i].total_upvotes)/1000*10)/10+"k"+"</td>");
-      tr.append("<td>" + domains_json_value1.domain[i].classify+"</td>");
-      tr.append("<td>" + domains_json_value1.domain[i].period+"</td>");
+      k = domains_json_value1.domain.length
 
-      //tr.append("<td>" + x_date_stg+"</td>");
-      //tr.append("<td>"+"<btn class=\"btn-md btn-hover btn-default\" onclick=\"deleteRow2(this)\">Delete</button>"+"</td>");
-      $('table').append(tr);
-    };
-    //google analytics - find-me
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-115904415-1', 'auto');
-    ga('send', 'pageview');
+      for (var i = 0; i <k; i++) {
+        tr = $('<tr>');
+
+        tr.append("<td>" + domains_json_value1.domain[i].domain+"</td>");
+        tr.append("<td>" + domains_json_value1.domain[i].subreddit+"</td>");
+        tr.append("<td>" + domains_json_value1.domain[i].submissions+"</td>");
+        tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].avg_score)/1000*10)/10+"k"+"</td>");
+        tr.append("<td>" + Math.round(Math.round(domains_json_value1.domain[i].median_score)/1000*10)/10+"k"+"</td>");
+        tr.append("<td>" + commaSeparateNumber(Math.round(domains_json_value1.domain[i].avg_score*domains_json_value1.domain[i].submissions))+"</td>");
+        //Math.round(Math.round(domains_json_value1.domain[i].total_upvotes)/1000*10)/10+"k"+"</td>");
+        tr.append("<td>" + domains_json_value1.domain[i].classify+"</td>");
+        tr.append("<td>" + domains_json_value1.domain[i].period+"</td>");
+
+        $('table').append(tr);
+
+      };
+
+
+      //google analytics - storyrake
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-115904415-1', 'auto');
+      ga('send', 'pageview');
