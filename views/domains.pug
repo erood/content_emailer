@@ -47,10 +47,10 @@ block content
         span(style='display:inline-block;margin-left:1px;')#external_subreddit_filter
         hr(style='height:4px; visibility:hidden;margin-top:1px;margin-bottom:0px')
         br
-        .p(style="font-size:20px;font-weight:bold;line-height:1.2;color:#341f97;padding-top:2px;text-align:center;") Period:
-        br
-        span(style='display:inline-block;margin-left:1px;')#external_period_filter
-        hr(style='height:4px; visibility:hidden;margin-top:1px;margin-bottom:0px')
+        //.p(style="font-size:20px;font-weight:bold;line-height:1.2;color:#341f97;padding-top:2px;text-align:center;") Period:
+        //br
+        //span(style='display:inline-block;margin-left:1px;')#external_period_filter
+        //hr(style='height:4px; visibility:hidden;margin-top:1px;margin-bottom:0px')
   br
 .container
   br
@@ -69,12 +69,25 @@ block content
       tbody
   
 
+
+  .container(style='text-align:center')
+    br
+    br
+    <div class='col-md-8 col-md-offset-2' style="background-color: #fff;border: 1px solid #ddd;border-radius: 4px;box-shadow: 0 2px 4px 0 rgba(0,0,0,0.20);">
+    <div  id="tester">
+    </div>
+    <p style="font-size:18px;color:#341f97;font-weight:400;text-align:center;">
+    <span id="result"></span>
+    </p>
+    </div>
   .container(style='text-align:center;width:60%')
     br
     br
     br
     .p(style='font-size:120%;font-weight:bold') [Storyrake CTA]
     
+
+
 
     // Begin MailChimp Signup Form
     link(href='//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css', rel='stylesheet', type='text/css')
@@ -130,14 +143,24 @@ block content
 
       //Datatable scripts
       $(document).ready(function() {
+          //initial filters
           $('#myTableData2').DataTable( {
+
+            //setting default filter to 'funny', needs to also be in sync with span
+            "searchCols": [
+              null,
+              { "search": "funny" },
+              null,
+              null
+              ],
+       
               "pagingType": "simple",
               "paging": true,
               responive: true,
               columnDefs: [
                   { responsivePriority: 1, targets: 0 },
-                  { responsivePriority: 3, targets: 2 },
-                  { responsivePriority: 2, targets: 4 },
+                  
+                  { responsivePriority: 2, targets: 5 },
 
                   //hide the subreddit, category, and period columns, since they'll be loaded in above
                   {
@@ -158,7 +181,7 @@ block content
               ],
               //default sort by # of total upvotes desc order
               "order": [[ 5, "desc" ]],
-              "pageLength": 10
+              "pageLength": 50
 
 
           } );
@@ -166,6 +189,9 @@ block content
       //YADCF scripts
       //initiate Datatable plug-in
       var table = $('#myTableData2').DataTable();
+
+
+      
       // Event listener to the two range filtering inputs to redraw on input
       $('#min, #max').keyup( function() {
       table.draw();
@@ -184,7 +210,7 @@ block content
         filter_container_id: 'external_subreddit_filter',
 
         },
-        {
+        /*{
         column_number : 7,
         filter_type: "select",
         column_data_type: "text",
@@ -193,33 +219,36 @@ block content
         sort_order: "asc",
         filter_container_id: 'external_period_filter',
 
-        },
-        /*{
-        column_number : 1,
-        filter_container_id: 'external_submissions_filter',
-        filter_type: "range_number",
-        },
-        {
-        column_number : 2,
-        filter_container_id: 'external_score_filter',
-        filter_type: "range_number",
-        },
-        {
-        column_number : 3,
-        filter_container_id: 'external_total_score_filter',
-        filter_type: "range_number",
-        },
-        {
-        column_number : 4
-        filter_type: "select",
-        column_data_type: "text",
-        html_data_type: "text",
-        sort_as: "alpha",
-        sort_order: "asc",
-        filter_container_id: 'external_cat_filter',
         },*/
+
         ]);
       } );
+
+
+
+    //plotly   
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    script(type='text/javascript').
+      window.onload = function start(){
+
+
+
+      
+
+
+      var table = document.getElementById("myTableData2");
+      for (var i = 0, row; row = table.rows[i]; i++) {
+        console.log(row.cells[0].innerHTML)
+        //console.log(row.cells[5].innerHTML)
+        
+        for (var j = 0, col; col = row.cells[j]; j++) {
+           //iterate through columns
+           //console.log(col)
+           //columns would be accessed using the "col" variable assigned in the for loop
+         }  
+        }}
+      
+
 
     script(type='text/javascript').
       var domains_json = document.getElementById("domains_json").value;
